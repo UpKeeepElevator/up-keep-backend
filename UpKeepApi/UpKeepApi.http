@@ -1,0 +1,6 @@
+@UpKeepApi_HostAddress = http://localhost:5286
+
+GET {{UpKeepApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
