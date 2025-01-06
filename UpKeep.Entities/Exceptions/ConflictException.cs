@@ -2,8 +2,8 @@ namespace UpKeep.Data.Exceptions;
 
 public abstract class ConflictException : Exception
 {
-    protected ConflictException(string message)
-        : base(message)
+    protected ConflictException(string correo)
+        : base(correo)
     {
     }
 }

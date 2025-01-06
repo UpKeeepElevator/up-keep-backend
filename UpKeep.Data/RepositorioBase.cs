@@ -4,15 +4,16 @@ namespace UpKeep.Data;
 
 public class RepositorioBase
 {
-    private readonly UpKeepDbContext _mysqlContext;
+    protected readonly UpKeepDbContext dbContext;
 
     public RepositorioBase(UpKeepDbContext mySqlContext)
     {
-        _mysqlContext = mySqlContext;
+        dbContext = mySqlContext;
     }
 
     protected void SavesChanges()
     {
+        dbContext.SaveChanges();
         // _transaction.Commit();
         // Database().Close();
     }

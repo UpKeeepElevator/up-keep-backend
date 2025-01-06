@@ -4,5 +4,7 @@ namespace UpKepp.Services.Contracts;
 
 public interface IUsuarioService
 {
-    public Task<UsuarioDTO> AutenticarUsuario(AuthUsuario usuarioAutenticar, string[] credenciales);
+    public Task<UsuarioLogin> AutenticarUsuario(AuthUsuario usuarioAutenticar, string[] credenciales);
+
+    public Task<UsuarioDTO> CrearUsuario(UsuarioRequest usuarioRequest);
 }

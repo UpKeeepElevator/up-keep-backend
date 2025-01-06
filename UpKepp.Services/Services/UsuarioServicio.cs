@@ -6,6 +6,8 @@ using Serilog;
 using UpKeep.Data.Configuration;
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.Exceptions.Conflict;
+using UpKeep.Data.Exceptions.NotFound;
 using UpKeep.Data.Models;
 using UpKepp.Services.Contracts;
 
@@ -23,7 +25,7 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config[0]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-        //TODO: utilizar roles correspondiente.
+        //Corregir claims
         bool esAdmin = false;
         bool esSuperAdmin = false;
 
@@ -54,31 +56,52 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
-    public async Task<UsuarioDTO> AutenticarUsuario(AuthUsuario usuarioAutenticar, string[] credenciales)
+    public async Task<UsuarioLogin> AutenticarUsuario(AuthUsuario usuarioAutenticar, string[] credenciales)
     {
         Log.Information($"Solicitud de autenticacion : {usuarioAutenticar.cuenta}");
 
-        UsuarioDTO objUsuario = await PRocesoAutenticacion(usuarioAutenticar);
-        // if (objUsuario.nombres == "")
-        //     return null;
+        UsuarioLogin objUsuario = await ProcesoAutenticacion(usuarioAutenticar);
+        if (objUsuario.Nombres == "")
+            return null;
 
-        // Log.Information($"Usuario: {objUsuario.cuenta} autenticado");
+        Log.Information($"Usuario: {objUsuario.Correo} autenticado");
 
         var tokenString = GenerateJSONWebToken(objUsuario, credenciales);
-        // objUsuario.Token = tokenString;
+        objUsuario.Token = tokenString;
 
 
         return objUsuario;
     }
 
-    private async Task<UsuarioDTO> PRocesoAutenticacion(AuthUsuario usuarioAutenticar)
+    public async Task<UsuarioDTO> CrearUsuario(UsuarioRequest usuarioRequest)
     {
-        // string userSalt = await _repositorioManager.usuarioRepositorio.GetUsuarioSalt(usuarioAutenticar);
-        string userSalt = "";
+        try
+        {
+            await _repositorioManager.usuarioRepositorio.GetUsuario(usuarioRequest.cuenta);
+            throw new UsuarioConflict(usuarioRequest.cuenta);
+        }
+        catch (UsuarioNotFound e)
+        {
+        }
+
+        var salt = usuarioRequest.GetNewSalt();
+        string obj = Convert.ToHexString(salt);
+
+        usuarioRequest.HashPasword(Encoding.UTF8.GetBytes(obj));
+        usuarioRequest.salt = Convert.ToHexString(salt);
+
+        UsuarioDTO newUser = await _repositorioManager.usuarioRepositorio.AgregarUsuario(usuarioRequest);
+
+        return newUser;
+    }
+
+    private async Task<UsuarioLogin> ProcesoAutenticacion(AuthUsuario usuarioAutenticar)
+    {
+        string userSalt = await _repositorioManager.usuarioRepositorio.GetUsuarioSalt(usuarioAutenticar);
 
         usuarioAutenticar.HashPasword(Encoding.UTF8.GetBytes(userSalt));
-        // var result =  await _repositorioManager.usuarioRepositorio.AutenticarUsuario(usuarioAutenticar, app);
+        var result = await _repositorioManager.usuarioRepositorio.AutenticarUsuario(usuarioAutenticar);
 
-        return new();
+        return result;
     }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.Exceptions.NotFound;
 using UpKeep.Data.Models;
 using UpKepp.Services.Contracts;
 
@@ -27,18 +28,32 @@ namespace UpKeepApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Login(AuthUsuario usuario)
         {
-            IActionResult response = Unauthorized();
             string[] credenciales =
                 [_config["JwtSettings:Key"], _config["JwtSettings:Issuer"], _config["JwtSettings:Audience"]];
-            var user = await _servicioManager.UsuarioServicio.AutenticarUsuario(usuario, credenciales);
+            UsuarioLogin user = new();
 
-            if (user == null)
-                return response;
+            try
+            {
+                user = await _servicioManager.UsuarioServicio.AutenticarUsuario(usuario, credenciales);
+            }
+            catch (UsuarioNotFound e)
+            {
+                return Unauthorized();
+            }
 
-            response = Ok(user);
+
+            return Ok(user);
+        }
 
 
-            return response;
+        [HttpPost("registrar")]
+        [AllowAnonymous]
+        [ProducesResponseType(typeof(UsuarioDTO), StatusCodes.Status201Created)]
+        public async Task<IActionResult> CrearUsuario([FromBody] UsuarioRequest usuario)
+        {
+            var nuevoUsuario = await _servicioManager.UsuarioServicio.CrearUsuario(usuario);
+
+            return Created("", nuevoUsuario);
         }
     }
 }

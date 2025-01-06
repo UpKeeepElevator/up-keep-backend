@@ -7,15 +7,15 @@ public partial class Usuario
 {
     public int UsuarioId { get; set; }
 
-    public string? Correo { get; set; }
+    public string Correo { get; set; }
 
-    public string? Nombres { get; set; }
+    public string Nombres { get; set; }
 
     public string? RutaId { get; set; }
 
-    public string? Password { get; set; }
+    public string Password { get; set; }
 
-    public string? Salt { get; set; }
+    public string Salt { get; set; }
 
     public string? Telefono { get; set; }
 
