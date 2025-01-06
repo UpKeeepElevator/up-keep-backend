@@ -1,6 +1,8 @@
 using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 using System.Security.Claims;
 using System.Text;
+using Mapster;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using UpKeep.Data.Configuration;
@@ -73,7 +75,7 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         return objUsuario;
     }
 
-    public async Task<UsuarioDTO> CrearUsuario(UsuarioRequest usuarioRequest)
+    public async Task<UsuarioDTO> CrearUsuario(UsuarioRequest usuarioRequest, bool esCliente = false)
     {
         try
         {
@@ -85,11 +87,24 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         }
 
         //Validation
-        bool validUser = usuarioRequest.Validar();
+        List<RolDto> roles = (await _repositorioManager.usuarioRepositorio.GetRoles()).AsQueryable()
+            .ProjectToType<RolDto>().ToList();
+
+        bool validUser = usuarioRequest.Validar(roles);
+
+        var rolCliente = usuarioRequest.Roles.FirstOrDefault(x => x.RolId == 3);
+
+        bool usuarioConRolCliente = !esCliente && rolCliente != null;
+        bool clienteSinRolCliente = esCliente && rolCliente == null;
+        bool clienteConMasDeUnRol = esCliente && usuarioRequest.Roles.Count() > 1;
+
+        if (usuarioConRolCliente || clienteSinRolCliente || clienteConMasDeUnRol)
+            validUser = false;
+
         if (!validUser)
             throw new Exception("Usuario invalido");
 
-
+        //Crear autenticacion
         var salt = usuarioRequest.GetNewSalt();
         string obj = Convert.ToHexString(salt);
 
@@ -97,6 +112,12 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         usuarioRequest.salt = Convert.ToHexString(salt);
 
         UsuarioDTO newUser = await _repositorioManager.usuarioRepositorio.AgregarUsuario(usuarioRequest);
+
+        if (esCliente)
+        {
+        }
+        //TODO: Crear cliente
+
 
         return newUser;
     }

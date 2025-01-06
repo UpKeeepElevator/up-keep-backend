@@ -30,15 +30,16 @@ public class UsuarioRepositorio : RepositorioBase, IUsuarioRepositorio
         UsuarioLogin usuarioLogin = new UsuarioLogin();
 
         Usuario? user = await dbContext.Usuarios
+            .Include(usuario => usuario.Rols)
             .FirstOrDefaultAsync(
                 x => x.Correo == usuarioAutenticar.cuenta && x.Password == usuarioAutenticar.contrasena);
 
         if (user == null)
             throw new UsuarioNotFound(usuarioAutenticar.cuenta);
 
-        var roles = user.Rols.ToList().AsQueryable();
+        var roles = user.Rols.ToList();
         usuarioLogin = user.Adapt<UsuarioLogin>();
-        usuarioLogin.Roles = roles.ProjectToType<RolDto>();
+        usuarioLogin.Roles = roles.AsQueryable().ProjectToType<RolDto>().ToList();
 
         return usuarioLogin;
     }

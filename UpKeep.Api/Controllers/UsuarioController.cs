@@ -26,6 +26,7 @@ namespace UpKeepApi.Controllers
         [Tags(["1 - Auth"])]
         [HttpPost("auth")]
         [AllowAnonymous]
+        [ProducesResponseType(typeof(UsuarioLogin), StatusCodes.Status200OK)]
         public async Task<IActionResult> Login(AuthUsuario usuario)
         {
             string[] credenciales =
