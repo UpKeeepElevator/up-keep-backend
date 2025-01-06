@@ -1,16 +1,22 @@
 using Microsoft.EntityFrameworkCore;
 using UpKeep.Data.Context;
+using UpKeepApi.Extensions;
+using UpKeepApi.Extensions.Config;
+using UpKeepApi.Extensions.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 
+var MyAllowSpecifiOrigins = "_MyAllowSpecifiOrigins";
 
-builder.Services.AddDbContext<UpKeepDbContext>(options=>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("upKeep") ?? ""));
+builder.Services.ConfigurarCORS(MyAllowSpecifiOrigins);
+builder.Services.ConfigurarWebAPI(builder.Configuration);
+
+//Servicios
+builder.Services.ConfigurarServicios(builder.Configuration);
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -19,7 +25,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-
-
+app.ConfigureExceptionHandler();
+app.UseCors(MyAllowSpecifiOrigins);
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
 
 app.Run();

@@ -8,6 +8,7 @@ nupkg/
 */bin/
 bin/
 obj/
+LOG/
 
 # Visual Studio Code
 .vscode/

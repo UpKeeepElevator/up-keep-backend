@@ -1,0 +1,7 @@
+namespace UpKeep.Data.Contracts;
+
+public interface IRepositorioManager
+{
+    IBucketRepositorio BucketRepositorio { get; }
+    IUsuarioRepositorio usuarioRepositorio { get; }
+}
