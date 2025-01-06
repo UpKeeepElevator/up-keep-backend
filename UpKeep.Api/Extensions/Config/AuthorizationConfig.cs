@@ -12,10 +12,12 @@ public static class AuthorizationConfig
         {
             //Utilizar Roles de Upkeep
             option.AddPolicy(IdentityData.AdminUserPolicyName,
-                policy => policy.RequireClaim(IdentityData.AdminClaimName, IdentityData.AdminClaimValue)
+                policy => policy.RequireClaim(IdentityData.AdminRoleClaimName, IdentityData.AdminRoleClaimValue)
             );
-            option.AddPolicy(IdentityData.SuperAdminPolicyName,
-                policy => policy.RequireClaim(IdentityData.SuperAdminClaimName, IdentityData.SuperAdminClaimValue));
+            option.AddPolicy(IdentityData.TecnicoRolePolicyName,
+                policy => policy.RequireClaim(IdentityData.TecnicoRoleClaimName, IdentityData.TecnicoRoleClaimValue));
+            option.AddPolicy(IdentityData.CLienteRolePolicyName,
+                policy => policy.RequireClaim(IdentityData.ClienteRoleClaimName, IdentityData.ClienteRoleClaimValue));
         });
 
         var info = new OpenApiInfo()

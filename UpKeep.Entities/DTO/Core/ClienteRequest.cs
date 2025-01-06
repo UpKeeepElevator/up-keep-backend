@@ -10,5 +10,8 @@ public class ClienteRequest
 
     public string NombreContacto { get; set; } = null!;
 
+    public int UsuarioId { get; set; } = 0;
+
+
     public AuthUsuario Usuario { get; set; } = null!;
 }

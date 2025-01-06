@@ -10,6 +10,7 @@ public class RepositorioManager : IRepositorioManager
 {
     private readonly Lazy<IUsuarioRepositorio> _usuarioRepositorio;
     private readonly Lazy<IBucketRepositorio> _bucketServicio;
+    private readonly Lazy<IClienteRepositorio> _clienteRepositorio;
 
 
     //Configuaracion
@@ -26,10 +27,12 @@ public class RepositorioManager : IRepositorioManager
         _bucketServicio = new Lazy<IBucketRepositorio>(() => new BucketRepositorio(_bucketConfig));
         _usuarioRepositorio =
             new Lazy<IUsuarioRepositorio>(() => new UsuarioRepositorio(_postgresContext));
+        _clienteRepositorio =
+            new Lazy<IClienteRepositorio>(() => new ClienteRepositorio(_postgresContext));
     }
 
 
     public IUsuarioRepositorio usuarioRepositorio => _usuarioRepositorio.Value;
-
+    public IClienteRepositorio clienteRepositorio => _clienteRepositorio.Value;
     public IBucketRepositorio BucketRepositorio => _bucketServicio.Value;
 }

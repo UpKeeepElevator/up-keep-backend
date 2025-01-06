@@ -30,24 +30,28 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
 
         //Corregir claims
         bool esAdmin = false;
-        bool esSuperAdmin = false;
+        bool esTecnico = false;
+        bool esCliente = false;
 
-        // foreach (Rol objRol in userInfo.roles)
-        // {
-        //     // if (objRol.cod_rol == 1 || objRol.cod_rol == 3)
-        //     //     esAdmin = true;
-        //     //
-        //     // if (objRol.cod_rol == 8)
-        //     //     esSuperAdmin = true;
-        // }
+        foreach (RolDto objRol in userInfo.Roles)
+        {
+            if (objRol.RolId == 1)
+                esTecnico = true;
+
+            if (objRol.RolId == 2)
+                esAdmin = true;
+
+            if (objRol.RolId == 3)
+                esCliente = true;
+        }
 
 
         var claims = new[]
         {
-            new Claim(IdentityData.AdminClaimName, esAdmin.ToString()),
-            // new Claim(IdentityData.LaboratorioCodClaimName, userInfo.laboratorio.laboratorio_cod),
-            // new Claim(ClaimTypes.NameIdentifier, userInfo.cod_usuario.ToString()),
-            new Claim(IdentityData.SuperAdminClaimName, esSuperAdmin.ToString())
+            new Claim(IdentityData.AdminRoleClaimName, esAdmin.ToString()),
+            new Claim(IdentityData.ClienteRoleClaimName, esCliente.ToString()),
+            new Claim(IdentityData.TecnicoRoleClaimName, esTecnico.ToString()),
+            new Claim(ClaimTypes.NameIdentifier, userInfo.UsuarioId.ToString()),
         };
 
         var token = new JwtSecurityToken(_config[1],
@@ -116,6 +120,11 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
 
 
         return newUser;
+    }
+
+    public async Task<IEnumerable<RolDto>> GetRoles()
+    {
+        return (await _repositorioManager.usuarioRepositorio.GetRoles()).AsQueryable().ProjectToType<RolDto>();
     }
 
     private async Task<UsuarioLogin> ProcesoAutenticacion(AuthUsuario usuarioAutenticar)
