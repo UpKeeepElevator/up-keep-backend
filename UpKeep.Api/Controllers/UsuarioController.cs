@@ -47,7 +47,6 @@ namespace UpKeepApi.Controllers
 
 
         [HttpPost("registrar")]
-        [AllowAnonymous]
         [ProducesResponseType(typeof(UsuarioDTO), StatusCodes.Status201Created)]
         public async Task<IActionResult> CrearUsuario([FromBody] UsuarioRequest usuario)
         {

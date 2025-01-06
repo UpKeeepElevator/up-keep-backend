@@ -84,6 +84,12 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         {
         }
 
+        //Validation
+        bool validUser = usuarioRequest.Validar();
+        if (!validUser)
+            throw new Exception("Usuario invalido");
+
+
         var salt = usuarioRequest.GetNewSalt();
         string obj = Convert.ToHexString(salt);
 

@@ -7,4 +7,16 @@ public class UsuarioRequest : AuthUsuario
     public string salt { get; set; } = "";
 
     public IEnumerable<RolDto> Roles { get; set; } = new List<RolDto>();
+
+    public bool Validar()
+    {
+        bool valido = true;
+        cuenta = cuenta.ToLower();
+
+        valido = !string.IsNullOrWhiteSpace(Nombres);
+        valido = !string.IsNullOrWhiteSpace(cuenta);
+
+
+        return valido;
+    }
 }
