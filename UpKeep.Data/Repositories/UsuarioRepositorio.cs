@@ -4,6 +4,7 @@ using Serilog;
 using UpKeep.Data.Context;
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.DTO.Core.Usuarios;
 using UpKeep.Data.Exceptions.NotFound;
 using UpKeep.Data.Models;
 

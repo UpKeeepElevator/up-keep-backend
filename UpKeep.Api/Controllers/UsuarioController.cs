@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.DTO.Core.Usuarios;
 using UpKeep.Data.Exceptions.NotFound;
 using UpKeep.Data.Models;
 using UpKepp.Services.Contracts;

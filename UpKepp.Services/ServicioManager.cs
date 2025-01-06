@@ -10,6 +10,7 @@ namespace UpKepp.Services;
 public class ServicioManager : IServicioManager
 {
     private readonly Lazy<IUsuarioService> _usuarioServicio;
+    private readonly Lazy<IClienteService> _clienteServicio;
 
 
     //Configuracion
@@ -28,8 +29,10 @@ public class ServicioManager : IServicioManager
         //INicializar
 
         _usuarioServicio = new Lazy<IUsuarioService>(() => new UsuarioServicio(_repositorioManager));
+        _clienteServicio = new Lazy<IClienteService>(() => new ClienteServicio(_repositorioManager));
     }
 
 
     public IUsuarioService UsuarioServicio => _usuarioServicio.Value;
+    public IClienteService ClienteServicio => _clienteServicio.Value;
 }

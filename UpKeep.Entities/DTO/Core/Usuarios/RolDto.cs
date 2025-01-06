@@ -1,4 +1,4 @@
-namespace UpKeep.Data.DTO.Core;
+namespace UpKeep.Data.DTO.Core.Usuarios;
 
 public class RolDto
 {

@@ -8,6 +8,7 @@ using Serilog;
 using UpKeep.Data.Configuration;
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.DTO.Core.Usuarios;
 using UpKeep.Data.Exceptions.Conflict;
 using UpKeep.Data.Exceptions.NotFound;
 using UpKeep.Data.Models;
@@ -112,11 +113,6 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         usuarioRequest.salt = Convert.ToHexString(salt);
 
         UsuarioDTO newUser = await _repositorioManager.usuarioRepositorio.AgregarUsuario(usuarioRequest);
-
-        if (esCliente)
-        {
-        }
-        //TODO: Crear cliente
 
 
         return newUser;

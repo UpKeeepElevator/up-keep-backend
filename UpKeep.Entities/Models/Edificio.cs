@@ -7,11 +7,11 @@ public partial class Edificio
 {
     public int EdificioId { get; set; }
 
-    public string? Edificio1 { get; set; }
+    public string Edificio1 { get; set; } = null!;
 
     public string? EdificioUbicacion { get; set; }
 
-    public string? Geolocalizacion { get; set; }
+    public string Geolocalizacion { get; set; } = null!;
 
     public int ClienteId { get; set; }
 

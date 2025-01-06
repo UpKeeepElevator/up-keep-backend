@@ -1,6 +1,6 @@
 using FluentEmail.Core;
 
-namespace UpKeep.Data.DTO.Core;
+namespace UpKeep.Data.DTO.Core.Usuarios;
 
 public class UsuarioRequest : AuthUsuario
 {

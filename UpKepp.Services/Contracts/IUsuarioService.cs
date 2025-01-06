@@ -1,4 +1,5 @@
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.DTO.Core.Usuarios;
 
 namespace UpKepp.Services.Contracts;
 

@@ -7,10 +7,6 @@ namespace UpKeep.Data.Context;
 
 public partial class UpKeepDbContext : DbContext
 {
-    public UpKeepDbContext()
-    {
-    }
-
     public UpKeepDbContext(DbContextOptions<UpKeepDbContext> options)
         : base(options)
     {
@@ -55,7 +51,6 @@ public partial class UpKeepDbContext : DbContext
     public virtual DbSet<TipoServicio> TipoServicios { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
-
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -247,6 +242,12 @@ public partial class UpKeepDbContext : DbContext
             entity.Property(e => e.Telefono)
                 .HasMaxLength(16)
                 .HasColumnName("telefono");
+            entity.Property(e => e.UsuarioId).HasColumnName("usuarioId");
+
+            entity.HasOne(d => d.Usuario).WithMany(p => p.Clientes)
+                .HasForeignKey(d => d.UsuarioId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("cliente_usuario_fk");
         });
 
         modelBuilder.Entity<Edificio>(entity =>
@@ -362,6 +363,8 @@ public partial class UpKeepDbContext : DbContext
             entity.HasKey(e => e.RolId).HasName("Rol_pkey");
 
             entity.ToTable("Rol");
+
+            entity.HasIndex(e => e.RolDescripcion, "rol_unique").IsUnique();
 
             entity.Property(e => e.RolId).HasColumnName("rol_Id");
             entity.Property(e => e.RolDescripcion)
@@ -525,6 +528,8 @@ public partial class UpKeepDbContext : DbContext
 
             entity.ToTable("Usuario");
 
+            entity.HasIndex(e => e.Correo, "usuario_unique").IsUnique();
+
             entity.Property(e => e.UsuarioId).HasColumnName("usuarioId");
             entity.Property(e => e.Correo)
                 .HasMaxLength(255)
@@ -533,14 +538,14 @@ public partial class UpKeepDbContext : DbContext
                 .HasMaxLength(255)
                 .HasColumnName("nombres");
             entity.Property(e => e.Password)
-                .HasMaxLength(32)
+                .HasMaxLength(129)
                 .IsFixedLength()
                 .HasColumnName("password");
             entity.Property(e => e.RutaId)
                 .HasMaxLength(10)
                 .HasColumnName("rutaId");
             entity.Property(e => e.Salt)
-                .HasMaxLength(32)
+                .HasMaxLength(129)
                 .IsFixedLength()
                 .HasColumnName("salt");
             entity.Property(e => e.Telefono)

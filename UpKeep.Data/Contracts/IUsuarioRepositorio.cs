@@ -1,4 +1,5 @@
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.DTO.Core.Usuarios;
 using UpKeep.Data.Models;
 
 namespace UpKeep.Data.Contracts;
