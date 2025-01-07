@@ -5,6 +5,7 @@ using Serilog;
 using UpKeep.Data.Context;
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.DTO.Core.Cliente;
 using UpKeep.Data.DTO.Core.Usuarios;
 using UpKeep.Data.Exceptions.NotFound;
 using UpKeep.Data.Models;
@@ -68,5 +69,20 @@ public class ClienteRepositorio : RepositorioBase, IClienteRepositorio
             .Adapt<UsuarioShort>();
 
         return clienteEncontrado;
+    }
+
+    public Task<IEnumerable<EdificioDto>> GetEdificiosCliente(int clienteId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> AgregarEdificio(EdificioRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<EdificioDto> GetEdificio(string requestEdificio1)
+    {
+        throw new NotImplementedException();
     }
 }

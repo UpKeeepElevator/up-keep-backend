@@ -3,6 +3,7 @@ using RazorLight.Extensions;
 using UpKeep.Data;
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.DTO.Core.Cliente;
 using UpKeep.Data.DTO.Core.Usuarios;
 using UpKeep.Data.Exceptions.Conflict;
 using UpKeep.Data.Exceptions.NotFound;
@@ -47,5 +48,30 @@ public class ClienteServicio : ServicioBase, IClienteService
         var cliente = await _repositorioManager.clienteRepositorio.GetCliente(clienteId);
 
         return cliente;
+    }
+
+    public async Task<IEnumerable<EdificioDto>> AgregarEdificio(EdificioRequest request)
+    {
+        //Buscar cliente
+        await _repositorioManager.clienteRepositorio.GetCliente(request.ClienteId);
+        //Buscar Edificio
+        try
+        {
+            EdificioDto obj = await _repositorioManager.clienteRepositorio.GetEdificio(request.Edificio1);
+            throw new GenericConflict("Edificio ya existe");
+        }
+        catch (EdificioNotFound e)
+        {
+        }
+
+        //Agregar edificio
+
+        bool exito = await _repositorioManager.clienteRepositorio.AgregarEdificio(request);
+
+        IEnumerable<EdificioDto> edificios =
+            await _repositorioManager.clienteRepositorio.GetEdificiosCliente(request.ClienteId);
+
+
+        return edificios;
     }
 }

@@ -11,6 +11,9 @@ public class RepositorioManager : IRepositorioManager
     private readonly Lazy<IUsuarioRepositorio> _usuarioRepositorio;
     private readonly Lazy<IBucketRepositorio> _bucketServicio;
     private readonly Lazy<IClienteRepositorio> _clienteRepositorio;
+    private readonly Lazy<IAscensorRepositorio> _ascensorRepositorio;
+    private readonly Lazy<IAveriaRepositorio> _averiaRepositorio;
+    private readonly Lazy<ISolicitudRepositorio> _solicitudRepositorio;
 
 
     //Configuaracion
@@ -29,10 +32,19 @@ public class RepositorioManager : IRepositorioManager
             new Lazy<IUsuarioRepositorio>(() => new UsuarioRepositorio(_postgresContext));
         _clienteRepositorio =
             new Lazy<IClienteRepositorio>(() => new ClienteRepositorio(_postgresContext));
+        _ascensorRepositorio =
+            new Lazy<IAscensorRepositorio>(() => new AscensorRepositorio(_postgresContext));
+        _averiaRepositorio =
+            new Lazy<IAveriaRepositorio>(() => new AveriaRepositorio(_postgresContext));
+        _solicitudRepositorio =
+            new Lazy<ISolicitudRepositorio>(() => new SolicitudRepositorio(_postgresContext));
     }
 
 
     public IUsuarioRepositorio usuarioRepositorio => _usuarioRepositorio.Value;
     public IClienteRepositorio clienteRepositorio => _clienteRepositorio.Value;
+    public IAscensorRepositorio ascensorRepositorio => _ascensorRepositorio.Value;
+    public IAveriaRepositorio averiaRepositorio => _averiaRepositorio.Value;
+    public ISolicitudRepositorio solicitudRepositorio => _solicitudRepositorio.Value;
     public IBucketRepositorio BucketRepositorio => _bucketServicio.Value;
 }

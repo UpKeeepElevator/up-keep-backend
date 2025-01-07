@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+namespace UpKeep.Data.DTO.Core.Averias;
 
-namespace UpKeep.Data.Models;
-
-public partial class Averium
+public class AveriaDto
 {
     public int AveriaId { get; set; }
 
@@ -34,14 +31,25 @@ public partial class Averium
     public string? Firma { get; set; }
 
     public string? Geolocalizacion { get; set; }
+}
 
-    public virtual ICollection<AnexoAverium> AnexoAveria { get; set; } = new List<AnexoAverium>();
+public class AveriaRegistroRequest
+{
+    public int AscensorId { get; set; }
+    public TipoAveriaDto TipoAveria { get; set; }
 
-    public virtual Ascensor Ascensor { get; set; } = null!;
+    public DateTime FechaReporte { get; set; }
 
-    public virtual SeccionAscensor? SeccionAveriaNavigation { get; set; }
+    public string? Evidencia { get; set; }
 
-    public virtual Usuario? Tecnico { get; set; }
+    public string ComentarioAveria { get; set; } = null!;
+}
 
-    public virtual TipoAverium TipoAveria { get; set; } = null!;
+public class TipoAveriaDto
+{
+    public int TipoAveriaId { get; set; }
+
+    public string TipoNombre { get; set; }
+
+    public string TipoDescripcion { get; set; }
 }

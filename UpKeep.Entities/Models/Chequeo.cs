@@ -25,5 +25,5 @@ public partial class Chequeo
 
     public virtual Mantenimiento Mantenimiento { get; set; } = null!;
 
-    public virtual Seccion Seccion { get; set; } = null!;
+    public virtual SeccionAscensor Seccion { get; set; } = null!;
 }

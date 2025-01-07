@@ -1,6 +1,6 @@
 using UpKeep.Data.DTO.Core.Usuarios;
 
-namespace UpKeep.Data.DTO.Core;
+namespace UpKeep.Data.DTO.Core.Cliente;
 
 public class ClienteRequest
 {
