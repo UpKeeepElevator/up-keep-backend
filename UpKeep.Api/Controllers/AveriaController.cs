@@ -19,9 +19,11 @@ namespace UpKeepApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ReportarAveria([FromBody] AveriaRegistroRequest registroRequest)
+        public async Task<IActionResult> ReportarAveria([FromForm] AveriaRegistroRequest registroRequest)
         {
             bool exito = await _servicioManager.AveriaServicio.ReportarAveria(registroRequest);
+
+            //TODO: Utilizar form con file de evidencias
 
             ResponseGeneric response = new ResponseGeneric();
             response.Message = $"Averia registrada para ascensor-{registroRequest.AscensorId}";
@@ -30,3 +32,14 @@ namespace UpKeepApi.Controllers
         }
     }
 }
+/*
+Averias
+- Cerrar averia
+- Buscar averias
+- Buscar averias de cliente.	
+- Buscar averias asignadas a tecnico
+- Buscar averias activas de cliente
+- Asignar averia a tecnico
+- Buscar averias activas
+- Buscar averia
+*/

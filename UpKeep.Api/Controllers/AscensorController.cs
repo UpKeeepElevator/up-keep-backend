@@ -33,3 +33,10 @@ namespace UpKeepApi.Controllers
         }
     }
 }
+/*
+
+Ascensores
+- Buscar ascensor
+- Buscar ascensores de edificio
+- editar ascensores
+*/

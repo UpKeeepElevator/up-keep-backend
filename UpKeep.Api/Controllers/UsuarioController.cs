@@ -58,3 +58,14 @@ namespace UpKeepApi.Controllers
         }
     }
 }
+
+
+/*
+Usuario
+- Eliminar usuario	
+- Recuperar contrase;a
+- Editar usuario
+- Ultimos servicios de tecnico.
+- Ultimos servicios de cliente.
+- Buscar tecnicos
+*/
