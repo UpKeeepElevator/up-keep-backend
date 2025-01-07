@@ -12,4 +12,5 @@ public interface IClienteRepositorio
     Task<IEnumerable<EdificioDto>> GetEdificiosCliente(int clienteId);
     Task<bool> AgregarEdificio(EdificioRequest request);
     Task<EdificioDto> GetEdificio(string requestEdificio1);
+    Task<EdificioDto> GetEdificio(int edificioId);
 }

@@ -32,24 +32,3 @@ public class AveriaDto
 
     public string? Geolocalizacion { get; set; }
 }
-
-public class AveriaRegistroRequest
-{
-    public int AscensorId { get; set; }
-    public TipoAveriaDto TipoAveria { get; set; }
-
-    public DateTime FechaReporte { get; set; }
-
-    public string? Evidencia { get; set; }
-
-    public string ComentarioAveria { get; set; } = null!;
-}
-
-public class TipoAveriaDto
-{
-    public int TipoAveriaId { get; set; }
-
-    public string TipoNombre { get; set; }
-
-    public string TipoDescripcion { get; set; }
-}

@@ -85,4 +85,9 @@ public class ClienteRepositorio : RepositorioBase, IClienteRepositorio
     {
         throw new NotImplementedException();
     }
+
+    public Task<EdificioDto> GetEdificio(int edificioId)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -27,7 +27,18 @@ public class AscensorDto
 
     public EdificioDto Edificio { get; set; } = null!;
 
-    IEnumerable<SeccionAscensor> Secciones { get; set; } = new List<SeccionAscensor>();
+    public IEnumerable<SeccionAscensorDto> Secciones { get; set; } = new List<SeccionAscensorDto>();
+}
+
+//TODO: Revisar tipo de seccion
+public class SeccionAscensorDto
+{
+    public int ParteAscensorId { get; set; }
+    public int SeccionId { get; set; }
+
+    public int AscensorId { get; set; }
+
+    public DateTime? UltimaRevision { get; set; }
 }
 
 public class AscensorRequest
