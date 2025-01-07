@@ -1,3 +1,4 @@
+using Mapster;
 using UpKeep.Data.Context;
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core.Averias;
@@ -10,9 +11,13 @@ public class AveriaRepositorio : RepositorioBase, IAveriaRepositorio
     {
     }
 
-    public Task<IEnumerable<TipoAveriaDto>> GetTipoAverias()
+    public async Task<IEnumerable<TipoAveriaDto>> GetTipoAverias()
     {
-        throw new NotImplementedException();
+        var tiposAverias = dbContext.TipoAveria;
+
+        await Task.FromResult(tiposAverias);
+
+        return tiposAverias.AsQueryable().ProjectToType<TipoAveriaDto>();
     }
 
     public Task<bool> ReportarAveria(AveriaRegistroRequest registroRequest)
