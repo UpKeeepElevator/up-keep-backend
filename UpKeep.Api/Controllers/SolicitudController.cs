@@ -18,7 +18,7 @@ namespace UpKeepApi.Controllers
             _servicioManager = servicioManager;
         }
 
-//- SOlicitar servicio
+        //- SOlicitar servicio
 
         [HttpPost]
         [ProducesResponseType(typeof(ResponseGeneric), StatusCodes.Status200OK)]
@@ -32,7 +32,23 @@ namespace UpKeepApi.Controllers
             return Ok(response);
         }
 
-//- Buscar servicios
+
+        [HttpPost("servicio")]
+        [ProducesResponseType(typeof(ResponseGeneric), StatusCodes.Status200OK)]
+        public async Task<IActionResult> AgregarServicio([FromBody] ServicioRequest request)
+        {
+            bool exito = await _servicioManager.SolicitudServicio.AgregarServicio(request);
+
+            ResponseGeneric response = new ResponseGeneric();
+            response.Message = $"Servicio-{request.nombreservicio} creado";
+
+            return Ok(response);
+        }
+
+
+
+
+        //- Buscar servicios
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<SolicitudDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetSolicitudes()
@@ -42,7 +58,7 @@ namespace UpKeepApi.Controllers
             return Ok(solicitudes);
         }
 
-//- Buscar solicitud
+        //- Buscar solicitud
         [HttpGet("{solicitudId}")]
         [ProducesResponseType(typeof(SolicitudDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetSolicitudes([FromRoute] int solicitudId)
@@ -52,7 +68,7 @@ namespace UpKeepApi.Controllers
 
             return Ok(solicitudes);
         }
-//- Buscar servicios de ascensor
+        //- Buscar servicios de ascensor
 
         [HttpGet("ascensor/{ascensorId}")]
         [ProducesResponseType(typeof(IEnumerable<SolicitudDto>), StatusCodes.Status200OK)]

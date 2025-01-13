@@ -41,12 +41,28 @@ namespace UpKeepApi.Controllers
             AscensorDto ascensorDto = await _servicioManager.AscensorServicio.GetAscensor(ascensorId);
             return Ok(ascensorDto);
         }
+
+        //- Buscar ascensor
+        [HttpGet("{ascensorId}")]
+        public async Task<IActionResult> GetAscensor([FromRoute] int ascensorId)
+        {
+            AscensorDto ascensor = await _servicioManager.AscensorServicio.GetAscensor(ascensorId);
+
+            return Ok(ascensor);
+        }
+        //- Buscar ascensores de edificio
+
+        [HttpGet("edificio/{edificioId}")]
+        public async Task<IActionResult> GetAscensoresEdificio([FromRoute] int edificioId)
+        {
+            IEnumerable<AscensorDto> ascensores = await _servicioManager.AscensorServicio.GetAscensoresEdificio(edificioId);
+
+            return Ok(ascensores);
+        }
+        //- editar ascensores
     }
 }
 /*
 
 Ascensores
-- Buscar ascensor
-- Buscar ascensores de edificio
-- editar ascensores
 */

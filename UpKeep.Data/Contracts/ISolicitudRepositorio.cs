@@ -9,5 +9,7 @@ public interface ISolicitudRepositorio
     Task<IEnumerable<SolicitudDto>> GetSolicitudes();
     Task<bool> SolicitarServicio(SolicitudRequest request);
     Task<ServicioDto> GetServicio(int requestServicioId);
+    Task<ServicioDto> GetServicio(string nombreservicio);
     Task<IEnumerable<PrioridadDto>> GetPrioridades();
+    Task<bool> AgregarServicio(ServicioRequest request);
 }

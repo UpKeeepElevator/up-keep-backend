@@ -9,4 +9,5 @@ public interface IAscensorRepositorio
     Task<IEnumerable<SeccionDto>> GetSecciones();
     Task<bool> AgregarSeccionesAscensor(int ascensorId, AscensorRequest request);
     Task<SeccionAscensorDto> GetSeccionAscensor(int cierreRequestSeccionAveria);
+    Task<IEnumerable<AscensorDto>> GetAscensoresEdificio(int edificioId);
 }

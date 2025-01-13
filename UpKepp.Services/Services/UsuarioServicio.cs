@@ -154,14 +154,14 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         return await _repositorioManager.usuarioRepositorio.GetTecnicos();
     }
 
-    public Task<IEnumerable<TrabajoAveria>> BuscarTrabajoAverias(int clienteId)
+    public async Task<IEnumerable<TrabajoAveria>> BuscarTrabajoAverias(int clienteId)
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.usuarioRepositorio.BuscarTrabajoAverias(clienteId);
     }
 
-    public Task<IEnumerable<TrabajoHecho>> BuscarTrabajosHechosTecnico(int tecnicoId)
+    public async Task<IEnumerable<TrabajoHecho>> BuscarTrabajosHechosTecnico(int tecnicoId)
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.usuarioRepositorio.BuscarTrabajosHechosTecnico(tecnicoId);
     }
 
     public Task<bool> DeleteUsuario(int usuarioId)

@@ -4,6 +4,8 @@ using Serilog;
 using UpKeep.Data.Context;
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.DTO.Core.Averias;
+using UpKeep.Data.DTO.Core.Cliente;
 using UpKeep.Data.DTO.Core.Usuarios;
 using UpKeep.Data.Exceptions.NotFound;
 using UpKeep.Data.Models;
@@ -128,6 +130,60 @@ public class UsuarioRepositorio : RepositorioBase, IUsuarioRepositorio
 
         return Task.FromResult(projectToType);
 
+
+    }
+
+    public Task<IEnumerable<TrabajoAveria>> BuscarTrabajoAverias(int clienteId)
+    {
+
+        IEnumerable<TrabajoAveria> averias = dbContext.Averia
+            .Join(dbContext.Ascensors,
+                x => x.AscensorId,
+                x => x.AscensorId,
+                (averia, ascensor) => new { averia, ascensor })
+            .Join(dbContext.Edificios,
+                x => x.ascensor.EdificioId,
+                x => x.EdificioId,
+                (averiaAscensor, edificio) => new { averia = averiaAscensor, edificio })
+            .Where(x => x.edificio.ClienteId == clienteId)
+            .Select(x => new TrabajoAveria()
+            {
+                Trabajo = "Averia",
+                FechaReportado = x.averia.averia.FechaReporte,
+                FechaAtendido = x.averia.averia.FechaRespuesta
+
+            }
+           );
+
+        return Task.FromResult(averias);
+
+
+    }
+
+    public Task<IEnumerable<TrabajoHecho>> BuscarTrabajosHechosTecnico(int tecnicoId)
+    {
+        var averias = dbContext.Averia
+            .Where(averia => averia.TecnicoId == tecnicoId)
+            .Select(x => new TrabajoHecho()
+            {
+                Fecha = x.FechaRespuesta,
+                Trabajo = "Averia",
+                AscensorId = x.AscensorId
+            });
+
+        var mantenimientos = new List<TrabajoHecho>();
+        // mantenimientos = dbContext.Mantenimientos
+        // .Where(mantenimiento => mantenimiento.TecnicoId == tecnicoId)
+        //     .Select(x => new TrabajoHecho()
+        //     {
+        //         Fecha = x.Fecha,
+        //         Trabajo = "Averia",
+        //         AscensorId = x.AscensorId ?? 0
+        //     });
+
+        IEnumerable<TrabajoHecho> trabajos = averias.Concat(mantenimientos);
+
+        return Task.FromResult(trabajos);
 
     }
 }

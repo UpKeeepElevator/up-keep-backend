@@ -17,20 +17,20 @@ public class SolicitudServicio : ServicioBase, ISolicitudService
         //Buscar tecnico
         var usuario = await _repositorioManager.usuarioRepositorio.GetUsuario(request.TecnicoId);
 
-      var rolTecnico=  usuario.Roles.FirstOrDefault(x => x.RolId == 1);
-      if (rolTecnico == null) throw new GenericConflict("Usuario indicado no es tecnico");
+        var rolTecnico = usuario.Roles.FirstOrDefault(x => x.RolId == 1);
+        if (rolTecnico == null) throw new GenericConflict("Usuario indicado no es tecnico");
 
         //Buscar ascensor
         await _repositorioManager.ascensorRepositorio.GetAscensor(request.AscensorId);
         //Buscar servicio
-      ServicioDto servcio =  await _repositorioManager.solicitudRepositorio.GetServicio(request.ServicioId);
+        ServicioDto servcio = await _repositorioManager.solicitudRepositorio.GetServicio(request.ServicioId);
 
         //buscar prioridades
         IEnumerable<PrioridadDto> prioridades = await _repositorioManager.solicitudRepositorio.GetPrioridades();
 
-        PrioridadDto? prioridadElegida = prioridades.FirstOrDefault(x=>x.PrioridadId == request.PrioridadId);
+        PrioridadDto? prioridadElegida = prioridades.FirstOrDefault(x => x.PrioridadId == request.PrioridadId);
 
-        if(prioridadElegida ==null) throw new GenericNotFound("Prioridad no encontrada");
+        if (prioridadElegida == null) throw new GenericNotFound("Prioridad no encontrada");
 
         bool exito = await _repositorioManager.solicitudRepositorio.SolicitarServicio(request);
 
@@ -51,5 +51,19 @@ public class SolicitudServicio : ServicioBase, ISolicitudService
     public async Task<IEnumerable<SolicitudDto>> GetSolicitudesAscensor(int ascensorId)
     {
         return await _repositorioManager.solicitudRepositorio.GetSolicitudesAscensor(ascensorId);
+    }
+
+    public async Task<bool> AgregarServicio(ServicioRequest request)
+    {
+        ServicioDto servicio = await _repositorioManager.solicitudRepositorio.GetServicio(request.nombreservicio);
+
+        bool exito = await _repositorioManager.solicitudRepositorio.AgregarServicio(request);
+
+        return exito;
+
+
+
+
+
     }
 }

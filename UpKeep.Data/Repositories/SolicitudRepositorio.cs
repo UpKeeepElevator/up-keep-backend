@@ -30,7 +30,7 @@ public class SolicitudRepositorio : RepositorioBase, ISolicitudRepositorio
     public Task<IEnumerable<SolicitudDto>> GetSolicitudesAscensor(int ascensorId)
     {
         var solicitudes = dbContext.Solicituds
-            .Where(x=>x.AscensorId == ascensorId);
+            .Where(x => x.AscensorId == ascensorId);
 
         IEnumerable<SolicitudDto> solicitudDtos = solicitudes.ProjectToType<SolicitudDto>();
 
@@ -78,9 +78,9 @@ public class SolicitudRepositorio : RepositorioBase, ISolicitudRepositorio
     public Task<ServicioDto> GetServicio(int requestServicioId)
     {
         var servicio = dbContext.Servicios
-            .Include(x=>x.TipoServicio)
+            .Include(x => x.TipoServicio)
             .FirstOrDefault(x => x.ServicioId == requestServicioId);
-        if(servicio == null) throw new ServicioNotFound(requestServicioId);
+        if (servicio == null) throw new ServicioNotFound(requestServicioId);
 
         ServicioDto servicioDto = servicio.Adapt<ServicioDto>();
         servicioDto.TipoServicio = servicio.TipoServicio.Adapt<TipoSevicioDto>();
@@ -94,5 +94,48 @@ public class SolicitudRepositorio : RepositorioBase, ISolicitudRepositorio
         IEnumerable<PrioridadDto> prioridadDtos = prioridades.ProjectToType<PrioridadDto>();
 
         return Task.FromResult(prioridadDtos);
+    }
+
+    public Task<ServicioDto> GetServicio(string nombreservicio)
+    {
+        var servicio = dbContext.Servicios
+            .Include(x => x.TipoServicio)
+            .FirstOrDefault(x => x.NombreServicio == nombreservicio);
+        if (servicio == null) throw new ServicioNotFound(nombreservicio);
+
+        ServicioDto servicioDto = servicio.Adapt<ServicioDto>();
+        servicioDto.TipoServicio = servicio.TipoServicio.Adapt<TipoSevicioDto>();
+
+        return Task.FromResult(servicioDto);
+    }
+
+    public Task<bool> AgregarServicio(ServicioRequest request)
+    {
+
+        Servicio nuevoServicio = new()
+        {
+            NombreServicio = request.nombreservicio,
+            Descripcion = request.descripcion
+
+        };
+
+        try
+        {
+            dbContext.Servicios.Add(nuevoServicio);
+            SavesChanges();
+            Log.Information("Servicio-{P1} agregado correctamente", request.nombreservicio);
+
+            return Task.FromResult(true);
+
+        }
+        catch (System.Exception e)
+        {
+
+            Log.Error("Error agregando servicio: {P1} {P2}", e.Message, e.InnerException);
+            throw new Exception($"Error agregar servicio-{request.nombreservicio}");
+
+        }
+
+
     }
 }
