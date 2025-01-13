@@ -515,7 +515,7 @@ public partial class UpKeepDbContext : DbContext
             entity.ToTable("Solicitud");
 
             entity.Property(e => e.SolicitudId)
-                .ValueGeneratedNever()
+                .HasDefaultValueSql("nextval('solicitud_solicitudid_seq'::regclass)")
                 .HasColumnName("solicitudId");
             entity.Property(e => e.AscensorId).HasColumnName("ascensorId");
             entity.Property(e => e.DescripcionSolicitud).HasColumnName("descripcionSolicitud");
@@ -635,6 +635,7 @@ public partial class UpKeepDbContext : DbContext
         modelBuilder.HasSequence("ascensor_ascensorid_seq");
         modelBuilder.HasSequence("averia_averiaid_seq");
         modelBuilder.HasSequence("seccion_seccionid_seq");
+        modelBuilder.HasSequence("solicitud_solicitudid_seq");
         modelBuilder.HasSequence("tipoaveria_tipoaveriaid_seq");
 
         OnModelCreatingPartial(modelBuilder);

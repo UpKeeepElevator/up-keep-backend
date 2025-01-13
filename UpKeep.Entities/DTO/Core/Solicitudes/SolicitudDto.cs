@@ -45,3 +45,27 @@ public class PrioridadDto
 
     public string NombrePrioridad { get; set; }
 }
+
+public class ServicioDto
+{
+
+    public int ServicioId { get; set; }
+
+    public string NombreServicio { get; set; } = null!;
+
+    public string Descripcion { get; set; } = null!;
+
+    public int TipoServicioId { get; set; }
+    public TipoSevicioDto TipoServicio { get;set; }
+
+}
+
+public class TipoSevicioDto
+{
+    public int TipoServicioId { get; set; }
+
+    public string Descripcion { get; set; } = null!;
+
+    public string NombreServicio { get; set; } = null!;
+
+}

@@ -1,5 +1,7 @@
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core.Solicitudes;
+using UpKeep.Data.Exceptions.Conflict;
+using UpKeep.Data.Exceptions.NotFound;
 using UpKepp.Services.Contracts;
 
 namespace UpKepp.Services.Services;
@@ -10,23 +12,44 @@ public class SolicitudServicio : ServicioBase, ISolicitudService
     {
     }
 
-    public Task<bool> SolicitarServicio(SolicitudRequest request)
+    public async Task<bool> SolicitarServicio(SolicitudRequest request)
     {
-        throw new NotImplementedException();
+        //Buscar tecnico
+        var usuario = await _repositorioManager.usuarioRepositorio.GetUsuario(request.TecnicoId);
+
+      var rolTecnico=  usuario.Roles.FirstOrDefault(x => x.RolId == 1);
+      if (rolTecnico == null) throw new GenericConflict("Usuario indicado no es tecnico");
+
+        //Buscar ascensor
+        await _repositorioManager.ascensorRepositorio.GetAscensor(request.AscensorId);
+        //Buscar servicio
+      ServicioDto servcio =  await _repositorioManager.solicitudRepositorio.GetServicio(request.ServicioId);
+
+        //buscar prioridades
+        IEnumerable<PrioridadDto> prioridades = await _repositorioManager.solicitudRepositorio.GetPrioridades();
+
+        PrioridadDto? prioridadElegida = prioridades.FirstOrDefault(x=>x.PrioridadId == request.PrioridadId);
+
+        if(prioridadElegida ==null) throw new GenericNotFound("Prioridad no encontrada");
+
+        bool exito = await _repositorioManager.solicitudRepositorio.SolicitarServicio(request);
+
+        return exito;
+
     }
 
-    public Task<IEnumerable<SolicitudDto>> GetSolicitudes()
+    public async Task<IEnumerable<SolicitudDto>> GetSolicitudes()
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.solicitudRepositorio.GetSolicitudes();
     }
 
-    public Task<SolicitudDto> GetSolicitud(int solicitudId)
+    public async Task<SolicitudDto> GetSolicitud(int solicitudId)
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.solicitudRepositorio.GetSolicitud(solicitudId);
     }
 
-    public Task<IEnumerable<SolicitudDto>> GetSolicitudesAscensor(int ascensorId)
+    public async Task<IEnumerable<SolicitudDto>> GetSolicitudesAscensor(int ascensorId)
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.solicitudRepositorio.GetSolicitudesAscensor(ascensorId);
     }
 }

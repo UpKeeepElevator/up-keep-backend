@@ -50,9 +50,14 @@ public class AveriaRepositorio : RepositorioBase, IAveriaRepositorio
 
     public async Task<AveriaDto> GetAveria(int averiaId)
     {
-        Averium averia = await dbContext.Averia.FirstAsync(x => x.AveriaId == averiaId);
+        Averium averia = await dbContext.Averia
+            .Include(x=>x.AnexoAveria)
+            .FirstAsync(x => x.AveriaId == averiaId);
 
-        return averia.Adapt<AveriaDto>();
+
+        AveriaDto averiaDto = averia.Adapt<AveriaDto>();
+        averiaDto.AnexoAveria = averia.AnexoAveria.ToList().AsQueryable().ProjectToType<AnexoAveriaDto>();
+        return averiaDto;
     }
 
     public Task CerrarAveria(AveriaCierreRequest cierreRequest)

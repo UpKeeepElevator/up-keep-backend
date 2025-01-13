@@ -31,4 +31,21 @@ public class AveriaDto
     public string? Firma { get; set; }
 
     public string? Geolocalizacion { get; set; }
+    public IEnumerable<AnexoAveriaDto> AnexoAveria { get; set; } = new List<AnexoAveriaDto>();
+}
+
+public class AnexoAveriaDto
+{
+    public Guid AnexoId { get; set; }
+
+    public string AnexoNombre { get; set; } = null!;
+
+    public string AnexoTipo { get; set; } = null!;
+
+    public string? AnexoRuta { get; set; }
+
+    public int AveriaId { get; set; }
+
+    public string? AnexoPeso { get; set; }
+
 }
