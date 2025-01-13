@@ -149,9 +149,9 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<UsuarioDTO>> GetTecnicos()
+    public async Task<IEnumerable<UsuarioDTO>> GetTecnicos()
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.usuarioRepositorio.GetTecnicos();
     }
 
     public Task<IEnumerable<TrabajoAveria>> BuscarTrabajoAverias(int clienteId)

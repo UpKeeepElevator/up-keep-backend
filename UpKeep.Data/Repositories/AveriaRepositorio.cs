@@ -110,6 +110,80 @@ public class AveriaRepositorio : RepositorioBase, IAveriaRepositorio
         return Task.FromResult(averiasDto);
     }
 
+    public Task<IEnumerable<AveriaDto>> GetAveriasCliente(int clienteId)
+    {
+        var averias = dbContext.Averia
+            .Join(dbContext.Ascensors,
+                x => x.AscensorId,
+                x => x.AscensorId,
+                (averia, ascensor) => new { averia, ascensor })
+            .Join(dbContext.Edificios,
+                x => x.ascensor.EdificioId,
+                x => x.EdificioId,
+                (averiaAscensor, edificio) => new { averia = averiaAscensor, edificio })
+            .Where(x => x.edificio.ClienteId == clienteId)
+            .Select(x =>
+           x.averia.averia);
+
+        IEnumerable<AveriaDto> averiasDto = averias.ProjectToType<AveriaDto>().AsEnumerable();
+        
+        return Task.FromResult(averiasDto);
+
+    }
+
+    public Task<IEnumerable<AveriaDto>> GetAveriasAsignadasTecnico(int tecnicoId)
+    {
+
+        var averias = dbContext.Averia
+            .Where(averia => averia.TecnicoId == tecnicoId);
+
+        IEnumerable<AveriaDto> averiasDto = averias.ProjectToType<AveriaDto>().AsEnumerable();
+
+        return Task.FromResult(averiasDto);
+    }
+
+    public Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadasActivas(int tecnicoId)
+    {
+        var averias = dbContext.Averia
+            .Where(x=>x.ErrorEncontrado == null)
+            .Where(averia => averia.TecnicoId == tecnicoId);
+
+        IEnumerable<AveriaDto> averiasDto = averias.ProjectToType<AveriaDto>().AsEnumerable();
+
+        return Task.FromResult(averiasDto);
+    }
+
+    public Task<IEnumerable<AveriaDto>> GetAveriasActivas()
+    {
+        var averias = dbContext.Averia
+            .Where(x => x.ErrorEncontrado == null);
+
+        IEnumerable<AveriaDto> averiasDto = averias.ProjectToType<AveriaDto>().AsEnumerable();
+
+        return Task.FromResult(averiasDto);
+    }
+
+    public Task<IEnumerable<AveriaDto>> GetAveriasClienteActivas(int clienteId)
+    {
+        var averias = dbContext.Averia
+            .Join(dbContext.Ascensors,
+                x => x.AscensorId,
+                x => x.AscensorId,
+                (averia, ascensor) => new { averia, ascensor })
+            .Join(dbContext.Edificios,
+                x => x.ascensor.EdificioId,
+                x => x.EdificioId,
+                (averiaAscensor, edificio) => new { averiaAscensor = averiaAscensor, edificio })
+            .Where(x => x.edificio.ClienteId == clienteId)
+            .Where(x=>x.averiaAscensor.averia.ErrorEncontrado == null)
+            .Select(x =>
+           x.averiaAscensor.averia);
+
+        IEnumerable<AveriaDto> averiasDto = averias.ProjectToType<AveriaDto>().AsEnumerable();
+
+        return Task.FromResult(averiasDto);
+    }
+
     public Task<bool> AgregarAnexoAveria(AnexoAverium anexo)
     {
         anexo.AnexoRuta =

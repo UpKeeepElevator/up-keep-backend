@@ -1,3 +1,4 @@
+using System.Net.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing.Constraints;
 using UpKeep.Data.Configuration;
@@ -120,33 +121,33 @@ public class AveriaServicio : ServicioBase, IAveriaService
         return await _repositorioManager.averiaRepositorio.GetAverias();
     }
 
-    public Task<IEnumerable<AveriaDto>> GetAveriasCliente(int clienteId)
+    public async Task<IEnumerable<AveriaDto>> GetAveriasCliente(int clienteId)
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.averiaRepositorio.GetAveriasCliente(clienteId);
     }
 
-    public Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadas(int tecnicoId)
+    public async Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadas(int tecnicoId)
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.averiaRepositorio.GetAveriasAsignadasTecnico(tecnicoId);
     }
 
-    public Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadasActivas(int tecnicoId)
+    public async Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadasActivas(int tecnicoId)
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.averiaRepositorio.GetAveriasTecnicoAsignadasActivas(tecnicoId);
     }
 
-    public Task<IEnumerable<AveriaDto>> GetAveriasClienteActivas(int clienteId)
+    public async Task<IEnumerable<AveriaDto>> GetAveriasClienteActivas(int clienteId)
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.averiaRepositorio.GetAveriasClienteActivas(clienteId);
     }
 
     public Task<IEnumerable<AveriaDto>> GetAveriasActivas()
     {
-        throw new NotImplementedException();
+        return _repositorioManager.averiaRepositorio.GetAveriasActivas();
     }
 
-    public Task<AveriaDto> GetAveria(int averiaId)
+    public async Task<AveriaDto> GetAveria(int averiaId)
     {
-        throw new NotImplementedException();
+        return await _repositorioManager.averiaRepositorio.GetAveria(averiaId);
     }
 }

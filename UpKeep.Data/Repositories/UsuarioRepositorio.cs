@@ -117,4 +117,17 @@ public class UsuarioRepositorio : RepositorioBase, IUsuarioRepositorio
     {
         return dbContext.Rols.ToList();
     }
+
+    public Task<IEnumerable<UsuarioDTO>> GetTecnicos()
+    {
+        int rolTecnico = 1;
+        var tecnicos = dbContext.Usuarios
+            .Where(x => x.Rols.Any(y => y.RolId == rolTecnico));
+
+        var projectToType = tecnicos.ProjectToType<UsuarioDTO>().AsEnumerable();
+
+        return Task.FromResult(projectToType);
+
+
+    }
 }

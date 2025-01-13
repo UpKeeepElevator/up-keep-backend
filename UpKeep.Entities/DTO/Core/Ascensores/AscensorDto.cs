@@ -30,7 +30,6 @@ public class AscensorDto
     public IEnumerable<SeccionAscensorDto> Secciones { get; set; } = new List<SeccionAscensorDto>();
 }
 
-//TODO: Revisar tipo de seccion
 public class SeccionAscensorDto
 {
     public int ParteAscensorId { get; set; }

@@ -11,5 +11,10 @@ public interface IAveriaRepositorio
     Task CerrarAveria(AveriaCierreRequest cierreRequest);
     Task AsignarTecnicoAveria(AveriaAsignacionRequest asignacionRequest);
     Task<IEnumerable<AveriaDto>> GetAverias();
+    Task<IEnumerable<AveriaDto>> GetAveriasCliente(int clienteId);
+    Task<IEnumerable<AveriaDto>> GetAveriasAsignadasTecnico(int tecnicoId);
+    Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadasActivas(int tecnicoId);
+    Task<IEnumerable<AveriaDto>> GetAveriasActivas();
+    Task<IEnumerable<AveriaDto>> GetAveriasClienteActivas(int clienteId);
     Task<bool> AgregarAnexoAveria(AnexoAverium anexo);
 }
