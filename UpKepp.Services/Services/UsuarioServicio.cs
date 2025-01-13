@@ -59,7 +59,7 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         var token = new JwtSecurityToken(_config[1],
             _config[2],
             claims,
-            expires: DateTime.Now.AddMinutes(60),
+            expires: DateTime.Now.AddMinutes(200),
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);

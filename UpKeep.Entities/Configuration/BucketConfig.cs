@@ -9,4 +9,5 @@ public class BucketConfig
 
 
     public static string UsersFolder() => $"/Usuarios";
+    public static string AveriaFolder() => $"/Averias";
 }

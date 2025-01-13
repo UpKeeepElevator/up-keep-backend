@@ -35,7 +35,7 @@ public class RepositorioManager : IRepositorioManager
         _ascensorRepositorio =
             new Lazy<IAscensorRepositorio>(() => new AscensorRepositorio(_postgresContext));
         _averiaRepositorio =
-            new Lazy<IAveriaRepositorio>(() => new AveriaRepositorio(_postgresContext));
+            new Lazy<IAveriaRepositorio>(() => new AveriaRepositorio(_postgresContext, _bucketConfig));
         _solicitudRepositorio =
             new Lazy<ISolicitudRepositorio>(() => new SolicitudRepositorio(_postgresContext));
     }

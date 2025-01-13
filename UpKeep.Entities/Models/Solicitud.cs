@@ -17,6 +17,8 @@ public partial class Solicitud
 
     public int PrioridadId { get; set; }
 
+    public string Estado { get; set; } = null!;
+
     public string? DescripcionSolicitud { get; set; }
 
     public int ServicioId { get; set; }

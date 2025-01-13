@@ -51,9 +51,12 @@ namespace UpKeepApi.Controllers
         [ProducesResponseType(typeof(ClienteDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> AgregarEdficio([FromBody] EdificioRequest request, [FromRoute] int clienteId)
         {
+            request.ClienteId = clienteId;
+
             IEnumerable<EdificioDto> edificios = await _servicioManager.ClienteServicio.AgregarEdificio(request);
 
             var respuesta = await _servicioManager.ClienteServicio.GetCliente(clienteId);
+            respuesta.Edificios = edificios;
 
             return Ok(respuesta);
         }

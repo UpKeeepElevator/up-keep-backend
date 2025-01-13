@@ -9,6 +9,8 @@ public partial class AnexoChequeo
 
     public string? AnexoNombre { get; set; }
 
+    public string? AnexoTipo { get; set; }
+
     public string? AnexoRuta { get; set; }
 
     public int? ChequeoId { get; set; }

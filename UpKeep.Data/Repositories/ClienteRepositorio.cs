@@ -73,21 +73,50 @@ public class ClienteRepositorio : RepositorioBase, IClienteRepositorio
 
     public Task<IEnumerable<EdificioDto>> GetEdificiosCliente(int clienteId)
     {
-        throw new NotImplementedException();
+        var edificios = dbContext.Edificios.Where(x => x.ClienteId == clienteId);
+
+        var edificiosDto = edificios.ProjectToType<EdificioDto>();
+
+        return Task.FromResult<IEnumerable<EdificioDto>>(edificiosDto);
     }
 
     public Task<bool> AgregarEdificio(EdificioRequest request)
     {
-        throw new NotImplementedException();
+        try
+        {
+            Edificio edificio = new()
+            {
+                Edificio1 = request.Edificio1,
+                EdificioUbicacion = request.EdificioUbicacion,
+                Geolocalizacion = request.Geolocalizacion,
+                ClienteId = request.ClienteId,
+            };
+
+            dbContext.Edificios.Add(edificio);
+            SavesChanges();
+            Log.Information("Edificio {P1} de cliente-{P2} agregado", request.Edificio1, request.ClienteId);
+            return Task.FromResult(true);
+        }
+        catch (Exception e)
+        {
+            Log.Error("Error agregando edificio: {P1} {P2}", e.Message, e.InnerException);
+            throw new Exception($"Error agregando edificio");
+        }
     }
 
     public Task<EdificioDto> GetEdificio(string requestEdificio1)
     {
-        throw new NotImplementedException();
+        Edificio? edificio = dbContext.Edificios.FirstOrDefault(x => x.Edificio1 == requestEdificio1);
+        if (edificio == null) throw new EdificioNotFound(requestEdificio1);
+
+        return Task.FromResult(edificio.Adapt<EdificioDto>());
     }
 
     public Task<EdificioDto> GetEdificio(int edificioId)
     {
-        throw new NotImplementedException();
+        Edificio? edificio = dbContext.Edificios.FirstOrDefault(x => x.EdificioId == edificioId);
+        if (edificio == null) throw new EdificioNotFound(edificioId);
+
+        return Task.FromResult(edificio.Adapt<EdificioDto>());
     }
 }

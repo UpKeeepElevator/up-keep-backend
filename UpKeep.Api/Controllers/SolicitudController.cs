@@ -1,5 +1,7 @@
-
+using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
+using UpKeep.Data.DTO;
+using UpKeep.Data.DTO.Core.Solicitudes;
 using UpKepp.Services.Contracts;
 
 namespace UpKeepApi.Controllers
@@ -16,17 +18,51 @@ namespace UpKeepApi.Controllers
             _servicioManager = servicioManager;
         }
 
+//- SOlicitar servicio
 
+        [HttpPost]
+        [ProducesResponseType(typeof(ResponseGeneric), StatusCodes.Status200OK)]
+        public async Task<IActionResult> SolicitarServicio([FromBody] SolicitudRequest request)
+        {
+            bool exito = await _servicioManager.SolicitudServicio.SolicitarServicio(request);
 
+            ResponseGeneric response = new ResponseGeneric();
+            response.Message = $"Solicitud creada para ascensor-{request.AscensorId}";
 
+            return Ok(response);
+        }
+
+//- Buscar servicios
+        [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<SolicitudDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetSolicitudes()
+        {
+            IEnumerable<SolicitudDto> solicitudes = await _servicioManager.SolicitudServicio.GetSolicitudes();
+
+            return Ok(solicitudes);
+        }
+
+//- Buscar solicitud
+        [HttpGet("{solicitudId}")]
+        [ProducesResponseType(typeof(SolicitudDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetSolicitudes([FromRoute] int solicitudId)
+
+        {
+            SolicitudDto solicitudes = await _servicioManager.SolicitudServicio.GetSolicitud(solicitudId);
+
+            return Ok(solicitudes);
+        }
+//- Buscar servicios de ascensor
+
+        [HttpGet("ascensor/{ascensorId}")]
+        [ProducesResponseType(typeof(IEnumerable<SolicitudDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetSolicitudesAscensor([FromRoute] int ascensorId)
+
+        {
+            IEnumerable<SolicitudDto> solicitudes =
+                await _servicioManager.SolicitudServicio.GetSolicitudesAscensor(ascensorId);
+
+            return Ok(solicitudes);
+        }
     }
 }
-
-/*
-
-Solicitud
-- SOlicitar servicio
-- Buscar servicios
-- Buscar solicitud
-- Buscar servicios de ascensor
-*/

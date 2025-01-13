@@ -50,6 +50,15 @@ public class ClienteServicio : ServicioBase, IClienteService
         return cliente;
     }
 
+    public async Task<EdificioDto> GetEdificio(string edificioNombre)
+    {
+        EdificioDto edificio = await _repositorioManager.clienteRepositorio.GetEdificio(edificioNombre);
+
+        edificio.Cliente = await _repositorioManager.clienteRepositorio.GetCliente(edificio.ClienteId);
+
+        return edificio;
+    }
+
     public async Task<IEnumerable<EdificioDto>> AgregarEdificio(EdificioRequest request)
     {
         //Buscar cliente
@@ -57,7 +66,7 @@ public class ClienteServicio : ServicioBase, IClienteService
         //Buscar Edificio
         try
         {
-            EdificioDto obj = await _repositorioManager.clienteRepositorio.GetEdificio(request.Edificio1);
+            EdificioDto obj = await GetEdificio(request.Edificio1);
             throw new GenericConflict("Edificio ya existe");
         }
         catch (EdificioNotFound e)

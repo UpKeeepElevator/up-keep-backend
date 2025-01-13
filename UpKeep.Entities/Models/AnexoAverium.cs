@@ -9,6 +9,8 @@ public partial class AnexoAverium
 
     public string AnexoNombre { get; set; } = null!;
 
+    public string AnexoTipo { get; set; } = null!;
+
     public string? AnexoRuta { get; set; }
 
     public int AveriaId { get; set; }

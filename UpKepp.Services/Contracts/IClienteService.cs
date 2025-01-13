@@ -8,5 +8,6 @@ public interface IClienteService
 {
     Task<ClienteDto> RegistrarCliente(ClienteRequest request);
     Task<ClienteDto> GetCliente(int clienteId);
+    Task<EdificioDto> GetEdificio(string edificioNombre);
     Task<IEnumerable<EdificioDto>> AgregarEdificio(EdificioRequest request);
 }

@@ -31,6 +31,16 @@ namespace UpKeepApi.Controllers
             response.StatusCode = 200;
             return Ok(response);
         }
+
+        [HttpPost("{ascensorId}")]
+        public async Task<IActionResult> AgregarSeccionesAscensor([FromRoute] int ascensorId,
+            [FromBody] AscensorRequest request)
+        {
+            bool exito = await _servicioManager.AscensorServicio.AgregarSeccionesAscensor(ascensorId, request);
+
+            AscensorDto ascensorDto = await _servicioManager.AscensorServicio.GetAscensor(ascensorId);
+            return Ok(ascensorDto);
+        }
     }
 }
 /*
