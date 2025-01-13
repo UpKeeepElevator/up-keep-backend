@@ -86,6 +86,16 @@ public class AveriaController : ControllerBase
         return Ok(averias);
     }
 
+    [HttpGet("tecnico/{tecnicoId}/activas")]
+    [ProducesResponseType(typeof(IEnumerable<AveriaDto>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAveriasTecnicoActivas([FromRoute] int tecnicoId)
+    {
+        IEnumerable<AveriaDto> averias =
+            await _servicioManager.AveriaServicio.GetAveriasTecnicoAsignadasActivas(tecnicoId);
+
+        return Ok(averias);
+    }
+
 //- Buscar averias activas de cliente
     [HttpGet("cliente/{clienteId}/activas")]
     [ProducesResponseType(typeof(IEnumerable<AveriaDto>), StatusCodes.Status200OK)]

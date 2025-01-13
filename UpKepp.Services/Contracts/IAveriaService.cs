@@ -10,6 +10,7 @@ public interface IAveriaService
     Task<IEnumerable<AveriaDto>> GetAverias();
     Task<IEnumerable<AveriaDto>> GetAveriasCliente(int clienteId);
     Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadas(int tecnicoId);
+    Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadasActivas(int tecnicoId);
     Task<IEnumerable<AveriaDto>> GetAveriasClienteActivas(int clienteId);
     Task<IEnumerable<AveriaDto>> GetAveriasActivas();
     Task<AveriaDto> GetAveria(int averiaId);

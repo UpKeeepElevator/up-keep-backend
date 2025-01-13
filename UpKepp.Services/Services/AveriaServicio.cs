@@ -67,7 +67,6 @@ public class AveriaServicio : ServicioBase, IAveriaService
         SeccionAscensorDto secciones =
             await _repositorioManager.ascensorRepositorio.GetSeccionAscensor(cierreRequest.SeccionAveria);
 
-        //TODO: Agregar anexos
 
         int contador = 1;
         foreach (IFormFile cierreRequestAnexo in cierreRequest.Anexos)
@@ -127,6 +126,11 @@ public class AveriaServicio : ServicioBase, IAveriaService
     }
 
     public Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadas(int tecnicoId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadasActivas(int tecnicoId)
     {
         throw new NotImplementedException();
     }
