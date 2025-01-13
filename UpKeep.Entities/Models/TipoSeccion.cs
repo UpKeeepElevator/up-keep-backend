@@ -7,9 +7,9 @@ public partial class TipoSeccion
 {
     public int TipoSeccionId { get; set; }
 
-    public string? TipoSeccionNombre { get; set; }
+    public string TipoSeccionNombre { get; set; } = null!;
 
-    public string? TipoDescripcion { get; set; }
+    public string TipoDescripcion { get; set; } = null!;
 
     public virtual ICollection<Seccion> Seccions { get; set; } = new List<Seccion>();
 }

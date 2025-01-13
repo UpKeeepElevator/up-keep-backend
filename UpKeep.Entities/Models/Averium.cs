@@ -7,15 +7,15 @@ public partial class Averium
 {
     public int AveriaId { get; set; }
 
-    public int? AscensorId { get; set; }
+    public int AscensorId { get; set; }
 
-    public int? TipoAveriaId { get; set; }
+    public int TipoAveriaId { get; set; }
 
-    public DateTime? FechaReporte { get; set; }
+    public DateTime FechaReporte { get; set; }
 
     public string? Evidencia { get; set; }
 
-    public string? ComentarioAveria { get; set; }
+    public string ComentarioAveria { get; set; } = null!;
 
     public DateTime? FechaRespuesta { get; set; }
 
@@ -35,11 +35,13 @@ public partial class Averium
 
     public string? Geolocalizacion { get; set; }
 
-    public virtual Ascensor? Ascensor { get; set; }
+    public virtual ICollection<AnexoAverium> AnexoAveria { get; set; } = new List<AnexoAverium>();
 
-    public virtual Seccion? SeccionAveriaNavigation { get; set; }
+    public virtual Ascensor Ascensor { get; set; } = null!;
+
+    public virtual SeccionAscensor? SeccionAveriaNavigation { get; set; }
 
     public virtual Usuario? Tecnico { get; set; }
 
-    public virtual TipoAverium? TipoAveria { get; set; }
+    public virtual TipoAverium TipoAveria { get; set; } = null!;
 }

@@ -12,6 +12,8 @@ public partial class UpKeepDbContext : DbContext
     {
     }
 
+    public virtual DbSet<AnexoAverium> AnexoAveria { get; set; }
+
     public virtual DbSet<AnexoChequeo> AnexoChequeos { get; set; }
 
     public virtual DbSet<Ascensor> Ascensors { get; set; }
@@ -40,6 +42,8 @@ public partial class UpKeepDbContext : DbContext
 
     public virtual DbSet<Seccion> Seccions { get; set; }
 
+    public virtual DbSet<SeccionAscensor> SeccionAscensors { get; set; }
+
     public virtual DbSet<Servicio> Servicios { get; set; }
 
     public virtual DbSet<Solicitud> Solicituds { get; set; }
@@ -59,6 +63,33 @@ public partial class UpKeepDbContext : DbContext
             .HasPostgresEnum("anexochequeo_anexo_tipo", new[] { "Video", "Foto" })
             .HasPostgresEnum("solicitud_estado", new[] { "Pendiente", "En progreso", "Completado" });
 
+        modelBuilder.Entity<AnexoAverium>(entity =>
+        {
+            entity.HasKey(e => e.AnexoId).HasName("AnexoAveria_pkey");
+
+            entity.Property(e => e.AnexoId)
+                .ValueGeneratedNever()
+                .HasColumnName("anexoId");
+            entity.Property(e => e.AnexoNombre)
+                .HasMaxLength(255)
+                .HasColumnName("anexo_nombre");
+            entity.Property(e => e.AnexoPeso)
+                .HasMaxLength(10)
+                .HasColumnName("anexo_peso");
+            entity.Property(e => e.AnexoRuta)
+                .HasMaxLength(255)
+                .HasColumnName("anexo_ruta");
+            entity.Property(e => e.AnexoTipo)
+                .HasMaxLength(12)
+                .HasColumnName("anexo_tipo");
+            entity.Property(e => e.AveriaId).HasColumnName("averiaId");
+
+            entity.HasOne(d => d.Averia).WithMany(p => p.AnexoAveria)
+                .HasForeignKey(d => d.AveriaId)
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("anexoaveria_averia_fk");
+        });
+
         modelBuilder.Entity<AnexoChequeo>(entity =>
         {
             entity.HasKey(e => e.AnexoId).HasName("AnexoChequeo_pkey");
@@ -77,6 +108,9 @@ public partial class UpKeepDbContext : DbContext
             entity.Property(e => e.AnexoRuta)
                 .HasMaxLength(255)
                 .HasColumnName("anexo_ruta");
+            entity.Property(e => e.AnexoTipo)
+                .HasMaxLength(12)
+                .HasColumnName("anexo_tipo");
             entity.Property(e => e.ChequeoId).HasColumnName("chequeoId");
 
             entity.HasOne(d => d.Chequeo).WithMany(p => p.AnexoChequeos)
@@ -92,7 +126,7 @@ public partial class UpKeepDbContext : DbContext
             entity.ToTable("Ascensor");
 
             entity.Property(e => e.AscensorId)
-                .ValueGeneratedNever()
+                .HasDefaultValueSql("nextval('ascensor_ascensorid_seq'::regclass)")
                 .HasColumnName("ascensorId");
             entity.Property(e => e.Capacidad).HasColumnName("capacidad");
             entity.Property(e => e.EdificioId).HasColumnName("edificioId");
@@ -118,7 +152,6 @@ public partial class UpKeepDbContext : DbContext
 
             entity.HasOne(d => d.Edificio).WithMany(p => p.Ascensors)
                 .HasForeignKey(d => d.EdificioId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("ascensor_edificio_fk");
         });
 
@@ -133,7 +166,6 @@ public partial class UpKeepDbContext : DbContext
                 .HasColumnName("rutaId");
             entity.Property(e => e.AscensorId).HasColumnName("ascensorId");
             entity.Property(e => e.FechaVisita).HasColumnName("fecha_visita");
-            entity.Property(e => e.FechaVisitada).HasColumnName("fecha_visitada");
             entity.Property(e => e.Orden)
                 .HasDefaultValue(0)
                 .HasColumnName("orden");
@@ -152,7 +184,7 @@ public partial class UpKeepDbContext : DbContext
             entity.HasKey(e => e.AveriaId).HasName("Averias_pkey");
 
             entity.Property(e => e.AveriaId)
-                .ValueGeneratedNever()
+                .HasDefaultValueSql("nextval('averia_averiaid_seq'::regclass)")
                 .HasColumnName("averiaId");
             entity.Property(e => e.AscensorId).HasColumnName("ascensorId");
             entity.Property(e => e.ComentarioAveria).HasColumnName("comentarioAveria");
@@ -177,13 +209,12 @@ public partial class UpKeepDbContext : DbContext
 
             entity.HasOne(d => d.Ascensor).WithMany(p => p.Averia)
                 .HasForeignKey(d => d.AscensorId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("averia_ascensor_fk");
 
             entity.HasOne(d => d.SeccionAveriaNavigation).WithMany(p => p.Averia)
                 .HasForeignKey(d => d.SeccionAveria)
-                .OnDelete(DeleteBehavior.SetNull)
-                .HasConstraintName("averia_seccion_fk");
+                .OnDelete(DeleteBehavior.Restrict)
+                .HasConstraintName("averia_seccion_ascensor_fk");
 
             entity.HasOne(d => d.Tecnico).WithMany(p => p.Averia)
                 .HasForeignKey(d => d.TecnicoId)
@@ -223,7 +254,7 @@ public partial class UpKeepDbContext : DbContext
 
             entity.HasOne(d => d.Seccion).WithMany(p => p.Chequeos)
                 .HasForeignKey(d => d.SeccionId)
-                .HasConstraintName("chequeo_seccion_fk");
+                .HasConstraintName("chequeo_seccion_ascensor_fk");
         });
 
         modelBuilder.Entity<Cliente>(entity =>
@@ -231,6 +262,8 @@ public partial class UpKeepDbContext : DbContext
             entity.HasKey(e => e.ClienteId).HasName("Cliente_pkey");
 
             entity.ToTable("Cliente");
+
+            entity.HasIndex(e => e.Nombre, "cliente_unique").IsUnique();
 
             entity.Property(e => e.ClienteId).HasColumnName("clienteId");
             entity.Property(e => e.Nombre)
@@ -246,7 +279,6 @@ public partial class UpKeepDbContext : DbContext
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Clientes)
                 .HasForeignKey(d => d.UsuarioId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("cliente_usuario_fk");
         });
 
@@ -255,6 +287,8 @@ public partial class UpKeepDbContext : DbContext
             entity.HasKey(e => e.EdificioId).HasName("Edificio_pkey");
 
             entity.ToTable("Edificio");
+
+            entity.HasIndex(e => e.Edificio1, "edificio_unique").IsUnique();
 
             entity.Property(e => e.EdificioId).HasColumnName("edificioId");
             entity.Property(e => e.ClienteId).HasColumnName("clienteId");
@@ -279,6 +313,8 @@ public partial class UpKeepDbContext : DbContext
             entity.HasKey(e => e.EstadoSeccionId).HasName("EstadoSeccion_pkey");
 
             entity.ToTable("EstadoSeccion");
+
+            entity.HasIndex(e => e.EstadoNombre, "estadoseccion_unique").IsUnique();
 
             entity.Property(e => e.EstadoSeccionId).HasColumnName("estadoSeccionId");
             entity.Property(e => e.EstadoDescripcion).HasColumnName("estado_descripcion");
@@ -309,7 +345,6 @@ public partial class UpKeepDbContext : DbContext
 
             entity.HasOne(d => d.Cliente).WithMany(p => p.Facturas)
                 .HasForeignKey(d => d.ClienteId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("factura_cliente_fk");
         });
 
@@ -350,6 +385,8 @@ public partial class UpKeepDbContext : DbContext
             entity.HasKey(e => e.PrioridadId).HasName("Prioridad_pkey");
 
             entity.ToTable("Prioridad");
+
+            entity.HasIndex(e => e.NombrePrioridad, "prioridad_unique").IsUnique();
 
             entity.Property(e => e.PrioridadId).HasColumnName("prioridadId");
             entity.Property(e => e.Descripcion).HasColumnName("descripcion");
@@ -393,11 +430,15 @@ public partial class UpKeepDbContext : DbContext
         {
             entity.HasKey(e => e.RutaId).HasName("Ruta_pkey");
 
+            entity.HasIndex(e => e.NombreRuta, "ruta_unique").IsUnique();
+
             entity.Property(e => e.RutaId)
                 .HasMaxLength(10)
                 .HasColumnName("rutaId");
             entity.Property(e => e.CantidadAscensores).HasColumnName("cantidadAscensores");
-            entity.Property(e => e.CantidadVisitas).HasColumnName("cantidadVisitas");
+            entity.Property(e => e.CantidadVisitas)
+                .HasDefaultValue(1)
+                .HasColumnName("cantidadVisitas");
             entity.Property(e => e.NombreRuta)
                 .HasMaxLength(100)
                 .HasColumnName("nombreRuta");
@@ -409,8 +450,10 @@ public partial class UpKeepDbContext : DbContext
 
             entity.ToTable("Seccion");
 
+            entity.HasIndex(e => e.NombreSeccion, "seccion_unique").IsUnique();
+
             entity.Property(e => e.SeccionId)
-                .ValueGeneratedNever()
+                .HasDefaultValueSql("nextval('seccion_seccionid_seq'::regclass)")
                 .HasColumnName("seccionId");
             entity.Property(e => e.NombreSeccion)
                 .HasMaxLength(150)
@@ -424,11 +467,33 @@ public partial class UpKeepDbContext : DbContext
                 .HasConstraintName("seccion_tiposeccion_fk");
         });
 
+        modelBuilder.Entity<SeccionAscensor>(entity =>
+        {
+            entity.HasKey(e => e.ParteAscensorId).HasName("Seccion_ascensor_pkey");
+
+            entity.ToTable("Seccion_ascensor");
+
+            entity.Property(e => e.ParteAscensorId).HasColumnName("parteAscensorId");
+            entity.Property(e => e.AscensorId).HasColumnName("ascensorId");
+            entity.Property(e => e.SeccionId).HasColumnName("seccionId");
+            entity.Property(e => e.UltimaRevision).HasColumnName("ultimaRevision");
+
+            entity.HasOne(d => d.Ascensor).WithMany(p => p.SeccionAscensors)
+                .HasForeignKey(d => d.AscensorId)
+                .HasConstraintName("seccion_ascensor_ascensor_fk");
+
+            entity.HasOne(d => d.Seccion).WithMany(p => p.SeccionAscensors)
+                .HasForeignKey(d => d.SeccionId)
+                .HasConstraintName("seccion_ascensor_seccion_fk");
+        });
+
         modelBuilder.Entity<Servicio>(entity =>
         {
             entity.HasKey(e => e.ServicioId).HasName("Servicio_pkey");
 
             entity.ToTable("Servicio");
+
+            entity.HasIndex(e => e.NombreServicio, "servicio_unique").IsUnique();
 
             entity.Property(e => e.ServicioId).HasColumnName("servicioId");
             entity.Property(e => e.Descripcion).HasColumnName("descripcion");
@@ -454,6 +519,10 @@ public partial class UpKeepDbContext : DbContext
                 .HasColumnName("solicitudId");
             entity.Property(e => e.AscensorId).HasColumnName("ascensorId");
             entity.Property(e => e.DescripcionSolicitud).HasColumnName("descripcionSolicitud");
+            entity.Property(e => e.Estado)
+                .HasMaxLength(12)
+                .HasDefaultValueSql("'Pendiente'::character varying")
+                .HasColumnName("estado");
             entity.Property(e => e.FechaRespuesta).HasColumnName("fechaRespuesta");
             entity.Property(e => e.FechaSolicitud).HasColumnName("fechaSolicitud");
             entity.Property(e => e.PrioridadId).HasColumnName("prioridadId");
@@ -485,8 +554,10 @@ public partial class UpKeepDbContext : DbContext
         {
             entity.HasKey(e => e.TipoAveriaId).HasName("TipoAveria_pkey");
 
+            entity.HasIndex(e => e.TipoNombre, "tipoaveria_unique").IsUnique();
+
             entity.Property(e => e.TipoAveriaId)
-                .ValueGeneratedNever()
+                .HasDefaultValueSql("nextval('tipoaveria_tipoaveriaid_seq'::regclass)")
                 .HasColumnName("tipoAveriaId");
             entity.Property(e => e.TipoDescripcion).HasColumnName("tipo_descripcion");
             entity.Property(e => e.TipoNombre)
@@ -499,6 +570,8 @@ public partial class UpKeepDbContext : DbContext
             entity.HasKey(e => e.TipoSeccionId).HasName("TipoSeccion_pkey");
 
             entity.ToTable("TipoSeccion");
+
+            entity.HasIndex(e => e.TipoSeccionNombre, "tiposeccion_unique").IsUnique();
 
             entity.Property(e => e.TipoSeccionId).HasColumnName("tipoSeccionId");
             entity.Property(e => e.TipoDescripcion).HasColumnName("tipo_descripcion");
@@ -514,6 +587,8 @@ public partial class UpKeepDbContext : DbContext
             entity.ToTable("TipoServicio");
 
             entity.HasIndex(e => e.NombreServicio, "UNIQUE_tipo_servicio");
+
+            entity.HasIndex(e => e.NombreServicio, "tiposervicio_unique").IsUnique();
 
             entity.Property(e => e.TipoServicioId).HasColumnName("tipoServicioId");
             entity.Property(e => e.Descripcion).HasColumnName("descripcion");
@@ -557,6 +632,10 @@ public partial class UpKeepDbContext : DbContext
                 .OnDelete(DeleteBehavior.SetNull)
                 .HasConstraintName("usuario_ruta_fk");
         });
+        modelBuilder.HasSequence("ascensor_ascensorid_seq");
+        modelBuilder.HasSequence("averia_averiaid_seq");
+        modelBuilder.HasSequence("seccion_seccionid_seq");
+        modelBuilder.HasSequence("tipoaveria_tipoaveriaid_seq");
 
         OnModelCreatingPartial(modelBuilder);
     }

@@ -7,25 +7,27 @@ public partial class Solicitud
 {
     public int SolicitudId { get; set; }
 
-    public int? TecnicoId { get; set; }
+    public int TecnicoId { get; set; }
 
-    public int? AscensorId { get; set; }
+    public int AscensorId { get; set; }
 
-    public DateTime? FechaSolicitud { get; set; }
+    public DateTime FechaSolicitud { get; set; }
 
     public DateTime? FechaRespuesta { get; set; }
 
-    public int? PrioridadId { get; set; }
+    public int PrioridadId { get; set; }
+
+    public string Estado { get; set; } = null!;
 
     public string? DescripcionSolicitud { get; set; }
 
-    public int? ServicioId { get; set; }
+    public int ServicioId { get; set; }
 
-    public virtual Ascensor? Ascensor { get; set; }
+    public virtual Ascensor Ascensor { get; set; } = null!;
 
-    public virtual Prioridad? Prioridad { get; set; }
+    public virtual Prioridad Prioridad { get; set; } = null!;
 
-    public virtual Servicio? Servicio { get; set; }
+    public virtual Servicio Servicio { get; set; } = null!;
 
-    public virtual Usuario? Tecnico { get; set; }
+    public virtual Usuario Tecnico { get; set; } = null!;
 }

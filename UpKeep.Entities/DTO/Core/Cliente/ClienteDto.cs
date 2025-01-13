@@ -1,6 +1,6 @@
 using UpKeep.Data.DTO.Core.Usuarios;
 
-namespace UpKeep.Data.DTO.Core;
+namespace UpKeep.Data.DTO.Core.Cliente;
 
 public class ClienteDto
 {
@@ -14,4 +14,6 @@ public class ClienteDto
 
     public int UsuarioId { get; set; }
     public UsuarioShort Usuario { get; set; } = null!;
+
+    public IEnumerable<EdificioDto> Edificios { get; set; } = new List<EdificioDto>();
 }

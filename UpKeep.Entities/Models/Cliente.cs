@@ -13,11 +13,11 @@ public partial class Cliente
 
     public string NombreContacto { get; set; } = null!;
 
-    public int UsuarioId { get; set; }
+    public int? UsuarioId { get; set; }
 
     public virtual ICollection<Edificio> Edificios { get; set; } = new List<Edificio>();
 
     public virtual ICollection<Factura> Facturas { get; set; } = new List<Factura>();
 
-    public virtual Usuario Usuario { get; set; } = null!;
+    public virtual Usuario? Usuario { get; set; }
 }

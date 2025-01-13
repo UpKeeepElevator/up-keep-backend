@@ -11,6 +11,9 @@ public class ServicioManager : IServicioManager
 {
     private readonly Lazy<IUsuarioService> _usuarioServicio;
     private readonly Lazy<IClienteService> _clienteServicio;
+    private readonly Lazy<IAscensorService> _ascensorServicio;
+    private readonly Lazy<IAveriaService> _averiaServicio;
+    private readonly Lazy<ISolicitudService> _solicitudServicio;
 
 
     //Configuracion
@@ -26,13 +29,18 @@ public class ServicioManager : IServicioManager
         _repositorioManager = repositorioManager;
         _fluentEmail = fluentEmail;
 
-        //INicializar
-
+        //Inicializar
         _usuarioServicio = new Lazy<IUsuarioService>(() => new UsuarioServicio(_repositorioManager));
         _clienteServicio = new Lazy<IClienteService>(() => new ClienteServicio(_repositorioManager));
+        _ascensorServicio = new Lazy<IAscensorService>(() => new AscensorService(_repositorioManager));
+        _averiaServicio = new Lazy<IAveriaService>(() => new AveriaServicio(_repositorioManager));
+        _solicitudServicio = new Lazy<ISolicitudService>(() => new SolicitudServicio(_repositorioManager));
     }
 
 
     public IUsuarioService UsuarioServicio => _usuarioServicio.Value;
     public IClienteService ClienteServicio => _clienteServicio.Value;
+    public IAveriaService AveriaServicio => _averiaServicio.Value;
+    public ISolicitudService SolicitudServicio => _solicitudServicio.Value;
+    public IAscensorService AscensorServicio => _ascensorServicio.Value;
 }

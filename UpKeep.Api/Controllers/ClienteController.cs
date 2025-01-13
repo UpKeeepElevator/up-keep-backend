@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.DTO.Core.Cliente;
 using UpKeep.Data.DTO.Core.Usuarios;
 using UpKepp.Services.Contracts;
 
@@ -16,7 +17,7 @@ namespace UpKeepApi.Controllers
         private readonly IServicioManager _servicioManager;
 
 
-        public ClienteController(IServicioManager servicioManager, IConfiguration config)
+        public ClienteController(IServicioManager servicioManager)
         {
             _servicioManager = servicioManager;
         }
@@ -45,5 +46,24 @@ namespace UpKeepApi.Controllers
 
             return Created("", cliente);
         }
+
+        [HttpPost("{clienteId}/edificio")]
+        [ProducesResponseType(typeof(ClienteDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> AgregarEdficio([FromBody] EdificioRequest request, [FromRoute] int clienteId)
+        {
+            request.ClienteId = clienteId;
+
+            IEnumerable<EdificioDto> edificios = await _servicioManager.ClienteServicio.AgregarEdificio(request);
+
+            var respuesta = await _servicioManager.ClienteServicio.GetCliente(clienteId);
+            respuesta.Edificios = edificios;
+
+            return Ok(respuesta);
+        }
     }
 }
+/*
+Cliente
+- Editar cliente
+- Buscar clientes
+*/

@@ -29,3 +29,20 @@ public class UsuarioRequest : AuthUsuario
         return valido;
     }
 }
+
+public class EditarUsuario
+{
+
+}
+
+public class RecuperarPassword
+{
+
+    public string cuenta { get; set; }
+}
+
+public class ResetPassword
+{
+    public string NewPassword { get; set; }
+
+}

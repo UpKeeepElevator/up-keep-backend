@@ -8,6 +8,8 @@ using Serilog;
 using UpKeep.Data.Configuration;
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core;
+using UpKeep.Data.DTO.Core.Averias;
+using UpKeep.Data.DTO.Core.Cliente;
 using UpKeep.Data.DTO.Core.Usuarios;
 using UpKeep.Data.Exceptions.Conflict;
 using UpKeep.Data.Exceptions.NotFound;
@@ -57,7 +59,7 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         var token = new JwtSecurityToken(_config[1],
             _config[2],
             claims,
-            expires: DateTime.Now.AddMinutes(60),
+            expires: DateTime.Now.AddMinutes(200),
             signingCredentials: credentials);
 
         return new JwtSecurityTokenHandler().WriteToken(token);
@@ -135,5 +137,40 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         var result = await _repositorioManager.usuarioRepositorio.AutenticarUsuario(usuarioAutenticar);
 
         return result;
+    }
+
+    public Task<bool> ForgotPassword(RecuperarPassword cuenta)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> ResetPassword(ResetPassword cuenta, string? usuario)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<IEnumerable<UsuarioDTO>> GetTecnicos()
+    {
+        return await _repositorioManager.usuarioRepositorio.GetTecnicos();
+    }
+
+    public Task<IEnumerable<TrabajoAveria>> BuscarTrabajoAverias(int clienteId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<TrabajoHecho>> BuscarTrabajosHechosTecnico(int tecnicoId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> DeleteUsuario(int usuarioId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<UsuarioDTO> EditarUsuario(int usuarioId, EditarUsuario usuario)
+    {
+        throw new NotImplementedException();
     }
 }

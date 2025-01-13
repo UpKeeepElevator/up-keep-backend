@@ -11,8 +11,6 @@ public partial class AscensorRutum
 
     public DateOnly? FechaVisita { get; set; }
 
-    public DateOnly? FechaVisitada { get; set; }
-
     public int Orden { get; set; }
 
     public virtual Ascensor Ascensor { get; set; } = null!;
