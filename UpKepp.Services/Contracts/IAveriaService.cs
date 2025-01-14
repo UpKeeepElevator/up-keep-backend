@@ -14,4 +14,5 @@ public interface IAveriaService
     Task<IEnumerable<AveriaDto>> GetAveriasClienteActivas(int clienteId);
     Task<IEnumerable<AveriaDto>> GetAveriasActivas();
     Task<AveriaDto> GetAveria(int averiaId);
+    Task<IEnumerable<TipoAveriaDto>> GetTiposAverias();
 }

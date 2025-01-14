@@ -150,4 +150,9 @@ public class AveriaServicio : ServicioBase, IAveriaService
     {
         return await _repositorioManager.averiaRepositorio.GetAveria(averiaId);
     }
+
+    public async Task<IEnumerable<TipoAveriaDto>> GetTiposAverias()
+    {
+        return await _repositorioManager.averiaRepositorio.GetTipoAverias();
+    }
 }
