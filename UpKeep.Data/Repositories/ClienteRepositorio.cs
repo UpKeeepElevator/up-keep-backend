@@ -47,13 +47,26 @@ public class ClienteRepositorio : RepositorioBase, IClienteRepositorio
 
     public async Task<ClienteDto> GetCliente(int clienteId)
     {
-        Cliente? cliente = await dbContext.Clientes.FirstOrDefaultAsync(x => x.ClienteId == clienteId);
+        Cliente? cliente = await dbContext.Clientes
+        .Include(x => x.Edificios)
+        .FirstOrDefaultAsync(x => x.ClienteId == clienteId);
         if (cliente == null)
             throw new ClienteNotFound(clienteId);
 
         ClienteDto clienteEncontrado = cliente.Adapt<ClienteDto>();
         clienteEncontrado.Usuario = dbContext.Usuarios.First(x => x.UsuarioId == clienteEncontrado.UsuarioId)
             .Adapt<UsuarioShort>();
+
+        clienteEncontrado.Edificios = cliente.Edificios
+        .Select(x => new EdificioDto()
+        {
+            ClienteId = x.ClienteId,
+            Edificio1 = x.Edificio1,
+            EdificioUbicacion = x.EdificioUbicacion,
+            Geolocalizacion = x.Geolocalizacion,
+            EdificioId = x.EdificioId
+        })
+        .AsQueryable().ProjectToType<EdificioDto>();
 
         return clienteEncontrado;
     }
@@ -67,13 +80,32 @@ public class ClienteRepositorio : RepositorioBase, IClienteRepositorio
         ClienteDto clienteEncontrado = cliente.Adapt<ClienteDto>();
         clienteEncontrado.Usuario = dbContext.Usuarios.First(x => x.UsuarioId == clienteEncontrado.UsuarioId)
             .Adapt<UsuarioShort>();
+        clienteEncontrado.Edificios = cliente.Edificios
+        .Select(x => new EdificioDto()
+        {
+            ClienteId = x.ClienteId,
+            Edificio1 = x.Edificio1,
+            EdificioUbicacion = x.EdificioUbicacion,
+            Geolocalizacion = x.Geolocalizacion,
+            EdificioId = x.EdificioId
+        })
+        .AsQueryable().ProjectToType<EdificioDto>();
 
         return clienteEncontrado;
     }
 
     public Task<IEnumerable<EdificioDto>> GetEdificiosCliente(int clienteId)
     {
-        var edificios = dbContext.Edificios.Where(x => x.ClienteId == clienteId);
+        var edificios = dbContext.Edificios
+        .Where(x => x.ClienteId == clienteId)
+        .Select(x => new EdificioDto()
+        {
+            ClienteId = x.ClienteId,
+            Edificio1 = x.Edificio1,
+            EdificioUbicacion = x.EdificioUbicacion,
+            Geolocalizacion = x.Geolocalizacion,
+            EdificioId = x.EdificioId
+        });
 
         var edificiosDto = edificios.ProjectToType<EdificioDto>();
 
@@ -118,5 +150,23 @@ public class ClienteRepositorio : RepositorioBase, IClienteRepositorio
         if (edificio == null) throw new EdificioNotFound(edificioId);
 
         return Task.FromResult(edificio.Adapt<EdificioDto>());
+    }
+
+    public Task<IEnumerable<ClienteDto>> GetClientes()
+    {
+        var clientes = dbContext.Clientes
+        .Select(x => new ClienteDto()
+        {
+            ClienteId = x.ClienteId,
+            Nombre = x.Nombre,
+            NombreContacto = x.NombreContacto,
+            Telefono = x.Telefono,
+            UsuarioId = x.UsuarioId ?? 0
+
+        });
+
+        var clientesDto = clientes.ProjectToType<ClienteDto>().AsEnumerable();
+
+        return Task.FromResult(clientesDto);
     }
 }

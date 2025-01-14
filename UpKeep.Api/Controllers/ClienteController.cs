@@ -60,10 +60,29 @@ namespace UpKeepApi.Controllers
 
             return Ok(respuesta);
         }
+
+        //- Buscar clientes
+        [HttpGet("{clienteId}")]
+        public async Task<IActionResult> GetCliente([FromRoute] int clienteId)
+        {
+            ClienteDto cliente = await _servicioManager.ClienteServicio.GetCliente(clienteId);
+
+            return Ok(cliente);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetClientes()
+        {
+            IEnumerable<ClienteDto> cliente = await _servicioManager.ClienteServicio.GetClientes();
+
+            return Ok(cliente);
+
+        }
+
     }
 }
 /*
 Cliente
 - Editar cliente
-- Buscar clientes
 */

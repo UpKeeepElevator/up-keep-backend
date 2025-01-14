@@ -83,4 +83,12 @@ public class ClienteServicio : ServicioBase, IClienteService
 
         return edificios;
     }
+
+    public async Task<IEnumerable<ClienteDto>> GetClientes()
+    {
+        IEnumerable<ClienteDto> clientes = await _repositorioManager.clienteRepositorio.GetClientes();
+
+
+        return clientes;
+    }
 }
