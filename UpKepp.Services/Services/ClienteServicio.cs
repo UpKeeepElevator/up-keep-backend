@@ -19,6 +19,7 @@ public class ClienteServicio : ServicioBase, IClienteService
 
     public async Task<ClienteDto> RegistrarCliente(ClienteRequest request)
     {
+        //
         //Validar request 
         try
         {
