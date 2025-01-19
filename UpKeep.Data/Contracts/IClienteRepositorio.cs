@@ -9,6 +9,7 @@ public interface IClienteRepositorio
     Task<ClienteDto> AgregarCliente(ClienteRequest cliente);
     Task<ClienteDto> GetCliente(int clienteId);
     Task<ClienteDto> GetCliente(string clienteNombre);
+    Task<ClienteDto> GetClienteConUsuario(int usuarioId);
     Task<IEnumerable<EdificioDto>> GetEdificiosCliente(int clienteId);
     Task<bool> AgregarEdificio(EdificioRequest request);
     Task<EdificioDto> GetEdificio(string requestEdificio1);

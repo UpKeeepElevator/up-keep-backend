@@ -68,7 +68,14 @@ namespace UpKeepApi.Controllers
             ClienteDto cliente = await _servicioManager.ClienteServicio.GetCliente(clienteId);
 
             return Ok(cliente);
+        }
 
+        [HttpGet("usuario/{usuarioId}")]
+        public async Task<IActionResult> GetClienteConUsuario([FromRoute] int usuarioId)
+        {
+            ClienteDto cliente = await _servicioManager.ClienteServicio.GetClienteConUsuario(usuarioId);
+
+            return Ok(cliente);
         }
 
         [HttpGet]
@@ -77,9 +84,7 @@ namespace UpKeepApi.Controllers
             IEnumerable<ClienteDto> cliente = await _servicioManager.ClienteServicio.GetClientes();
 
             return Ok(cliente);
-
         }
-
     }
 }
 /*

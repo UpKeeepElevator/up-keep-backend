@@ -51,6 +51,13 @@ public class ClienteServicio : ServicioBase, IClienteService
         return cliente;
     }
 
+    public async Task<ClienteDto> GetClienteConUsuario(int usuarioId)
+    {
+        var cliente = await _repositorioManager.clienteRepositorio.GetClienteConUsuario(usuarioId);
+
+        return cliente;
+    }
+
     public async Task<EdificioDto> GetEdificio(string edificioNombre)
     {
         EdificioDto edificio = await _repositorioManager.clienteRepositorio.GetEdificio(edificioNombre);

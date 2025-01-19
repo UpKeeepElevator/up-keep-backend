@@ -94,7 +94,7 @@ public class AveriaController : ControllerBase
     }
 
     [HttpGet("tipo-averias")]
-    [ProducesResponseType(typeof(IEnumerable<AveriaDto>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<TipoAveriaDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAveriasTipos()
     {
         IEnumerable<TipoAveriaDto> averias = await _servicioManager.AveriaServicio.GetTiposAverias();
@@ -172,5 +172,4 @@ public class AveriaController : ControllerBase
 
         return Ok(averias);
     }
-
 }
