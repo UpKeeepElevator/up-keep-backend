@@ -73,7 +73,9 @@ public class ClienteRepositorio : RepositorioBase, IClienteRepositorio
 
     public async Task<ClienteDto> GetCliente(string clienteNombre)
     {
-        Cliente? cliente = await dbContext.Clientes.FirstOrDefaultAsync(x => x.Nombre == clienteNombre);
+        Cliente? cliente = await dbContext.Clientes
+            .Include(x => x.Edificios)
+            .FirstOrDefaultAsync(x => x.Nombre == clienteNombre);
         if (cliente == null)
             throw new ClienteNotFound(clienteNombre);
 
@@ -96,7 +98,9 @@ public class ClienteRepositorio : RepositorioBase, IClienteRepositorio
 
     public async Task<ClienteDto> GetClienteConUsuario(int usuarioId)
     {
-        Cliente? cliente = await dbContext.Clientes.FirstOrDefaultAsync(x => x.UsuarioId == usuarioId);
+        Cliente? cliente = await dbContext.Clientes
+            .Include(x => x.Edificios)
+            .FirstOrDefaultAsync(x => x.UsuarioId == usuarioId);
         if (cliente == null)
             throw new ClienteNotFound(0);
 
