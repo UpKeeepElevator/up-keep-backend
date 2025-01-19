@@ -51,7 +51,7 @@ public class AveriaRepositorio : RepositorioBase, IAveriaRepositorio
     public async Task<AveriaDto> GetAveria(int averiaId)
     {
         Averium averia = await dbContext.Averia
-            .Include(x=>x.AnexoAveria)
+            .Include(x => x.AnexoAveria)
             .FirstAsync(x => x.AveriaId == averiaId);
 
 
@@ -128,17 +128,17 @@ public class AveriaRepositorio : RepositorioBase, IAveriaRepositorio
                 (averiaAscensor, edificio) => new { averia = averiaAscensor, edificio })
             .Where(x => x.edificio.ClienteId == clienteId)
             .Select(x =>
-           x.averia.averia);
+                x.averia.averia);
 
-        IEnumerable<AveriaDto> averiasDto = averias.ProjectToType<AveriaDto>().AsEnumerable();
-        
+        IEnumerable<AveriaDto> averiasDto = averias.ProjectToType<AveriaDto>()
+            .OrderByDescending(x => x.FechaReporte)
+            .AsEnumerable();
+
         return Task.FromResult(averiasDto);
-
     }
 
     public Task<IEnumerable<AveriaDto>> GetAveriasAsignadasTecnico(int tecnicoId)
     {
-
         var averias = dbContext.Averia
             .Where(averia => averia.TecnicoId == tecnicoId);
 
@@ -150,7 +150,7 @@ public class AveriaRepositorio : RepositorioBase, IAveriaRepositorio
     public Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadasActivas(int tecnicoId)
     {
         var averias = dbContext.Averia
-            .Where(x=>x.ErrorEncontrado == null)
+            .Where(x => x.ErrorEncontrado == null)
             .Where(averia => averia.TecnicoId == tecnicoId);
 
         IEnumerable<AveriaDto> averiasDto = averias.ProjectToType<AveriaDto>().AsEnumerable();
@@ -180,9 +180,9 @@ public class AveriaRepositorio : RepositorioBase, IAveriaRepositorio
                 x => x.EdificioId,
                 (averiaAscensor, edificio) => new { averiaAscensor = averiaAscensor, edificio })
             .Where(x => x.edificio.ClienteId == clienteId)
-            .Where(x=>x.averiaAscensor.averia.ErrorEncontrado == null)
+            .Where(x => x.averiaAscensor.averia.ErrorEncontrado == null)
             .Select(x =>
-           x.averiaAscensor.averia);
+                x.averiaAscensor.averia);
 
         IEnumerable<AveriaDto> averiasDto = averias.ProjectToType<AveriaDto>().AsEnumerable();
 
