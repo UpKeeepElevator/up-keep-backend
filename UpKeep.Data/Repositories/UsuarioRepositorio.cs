@@ -129,13 +129,10 @@ public class UsuarioRepositorio : RepositorioBase, IUsuarioRepositorio
         var projectToType = tecnicos.ProjectToType<UsuarioDTO>().AsEnumerable();
 
         return Task.FromResult(projectToType);
-
-
     }
 
     public Task<IEnumerable<TrabajoAveria>> BuscarTrabajoAverias(int clienteId)
     {
-
         IEnumerable<TrabajoAveria> averias = dbContext.Averia
             .Join(dbContext.Ascensors,
                 x => x.AscensorId,
@@ -147,17 +144,14 @@ public class UsuarioRepositorio : RepositorioBase, IUsuarioRepositorio
                 (averiaAscensor, edificio) => new { averia = averiaAscensor, edificio })
             .Where(x => x.edificio.ClienteId == clienteId)
             .Select(x => new TrabajoAveria()
-            {
-                Trabajo = "Averia",
-                FechaReportado = x.averia.averia.FechaReporte,
-                FechaAtendido = x.averia.averia.FechaRespuesta
-
-            }
-           );
+                {
+                    Trabajo = "Averia",
+                    FechaReportado = x.averia.averia.FechaReporte,
+                    FechaAtendido = x.averia.averia.FechaRespuesta
+                }
+            );
 
         return Task.FromResult(averias);
-
-
     }
 
     public Task<IEnumerable<TrabajoHecho>> BuscarTrabajosHechosTecnico(int tecnicoId)
@@ -181,9 +175,8 @@ public class UsuarioRepositorio : RepositorioBase, IUsuarioRepositorio
         //         AscensorId = x.AscensorId ?? 0
         //     });
 
-        IEnumerable<TrabajoHecho> trabajos = averias.Concat(mantenimientos);
+        IEnumerable<TrabajoHecho> trabajos = averias;
 
         return Task.FromResult(trabajos);
-
     }
 }
