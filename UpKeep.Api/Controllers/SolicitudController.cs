@@ -1,4 +1,5 @@
 using System.Drawing;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using UpKeep.Data.DTO;
 using UpKeep.Data.DTO.Core.Solicitudes;
@@ -8,6 +9,7 @@ namespace UpKeepApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+[Authorize]
     public class SolicitudController : ControllerBase
     {
         private readonly IServicioManager _servicioManager;
