@@ -8,6 +8,7 @@ public static class CORSConfig
         {
             "http://localhost:8100",
             "http://localhost:4200",
+            "https://upkeep.duckdns.org"
         };
 
 
