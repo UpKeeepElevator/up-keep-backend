@@ -12,4 +12,6 @@ public interface ISolicitudRepositorio
     Task<ServicioDto> GetServicio(string nombreservicio);
     Task<IEnumerable<PrioridadDto>> GetPrioridades();
     Task<bool> AgregarServicio(ServicioRequest request);
+    Task<IEnumerable<ServicioDto>> GetServicios();
+    Task<IEnumerable<TipoSevicioDto>> GetTiposServicios();
 }

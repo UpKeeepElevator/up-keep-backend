@@ -1,3 +1,5 @@
+using Amazon.Runtime;
+using FluentEmail.Core;
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core.Solicitudes;
 using UpKeep.Data.Exceptions.Conflict;
@@ -35,7 +37,6 @@ public class SolicitudServicio : ServicioBase, ISolicitudService
         bool exito = await _repositorioManager.solicitudRepositorio.SolicitarServicio(request);
 
         return exito;
-
     }
 
     public async Task<IEnumerable<SolicitudDto>> GetSolicitudes()
@@ -55,15 +56,36 @@ public class SolicitudServicio : ServicioBase, ISolicitudService
 
     public async Task<bool> AgregarServicio(ServicioRequest request)
     {
-        ServicioDto servicio = await _repositorioManager.solicitudRepositorio.GetServicio(request.nombreservicio);
+        try
+        {
+            ServicioDto servicio = await _repositorioManager.solicitudRepositorio.GetServicio(request.nombreservicio);
+            throw new GenericConflict("Servicio ya existe");
+        }
+        catch (ServicioNotFound e)
+        {
+        }
 
         bool exito = await _repositorioManager.solicitudRepositorio.AgregarServicio(request);
 
         return exito;
+    }
 
+    public async Task<IEnumerable<ServicioDto>> GetServicios()
+    {
+        var servicios = await _repositorioManager.solicitudRepositorio.GetServicios();
 
+        return servicios;
+    }
 
+    public async Task<IEnumerable<TipoSevicioDto>> GetTipoServicios()
+    {
+        var tiposServicios = await _repositorioManager.solicitudRepositorio.GetTiposServicios();
 
+        return tiposServicios;
+    }
 
+    public async Task<IEnumerable<PrioridadDto>> GetPrioridades()
+    {
+        return await _repositorioManager.solicitudRepositorio.GetPrioridades();
     }
 }

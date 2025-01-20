@@ -9,4 +9,7 @@ public interface ISolicitudService
     Task<SolicitudDto> GetSolicitud(int solicitudId);
     Task<IEnumerable<SolicitudDto>> GetSolicitudesAscensor(int ascensorId);
     Task<bool> AgregarServicio(ServicioRequest request);
+    Task<IEnumerable<ServicioDto>> GetServicios();
+    Task<IEnumerable<TipoSevicioDto>> GetTipoServicios();
+    Task<IEnumerable<PrioridadDto>> GetPrioridades();
 }

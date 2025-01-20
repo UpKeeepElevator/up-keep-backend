@@ -1,3 +1,5 @@
+using UpKeep.Data.DTO.Core.Cliente;
+
 namespace UpKeep.Data.DTO.Core.Averias;
 
 public class AveriaDto
@@ -31,6 +33,8 @@ public class AveriaDto
     public string? Firma { get; set; }
 
     public string? Geolocalizacion { get; set; }
+
+    public EdificioDto? Edificio { get; set; }
     public IEnumerable<AnexoAveriaDto> AnexoAveria { get; set; } = new List<AnexoAveriaDto>();
 }
 
@@ -47,5 +51,4 @@ public class AnexoAveriaDto
     public int AveriaId { get; set; }
 
     public string? AnexoPeso { get; set; }
-
 }

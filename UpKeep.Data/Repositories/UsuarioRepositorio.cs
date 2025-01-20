@@ -65,6 +65,7 @@ public class UsuarioRepositorio : RepositorioBase, IUsuarioRepositorio
     public async Task<UsuarioDTO> GetUsuario(int usuarioId)
     {
         Usuario? user = await dbContext.Usuarios
+            .Include(usuario => usuario.Rols)
             .FirstOrDefaultAsync(
                 x => x.UsuarioId == usuarioId);
         if (user == null)

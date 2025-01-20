@@ -9,7 +9,7 @@ namespace UpKeepApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-[Authorize]
+    [Authorize]
     public class SolicitudController : ControllerBase
     {
         private readonly IServicioManager _servicioManager;
@@ -48,17 +48,17 @@ namespace UpKeepApi.Controllers
         }
 
 
-
-
-        //- Buscar servicios
+        //- Buscar solicitudes
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<SolicitudDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetSolicitudes()
         {
             IEnumerable<SolicitudDto> solicitudes = await _servicioManager.SolicitudServicio.GetSolicitudes();
 
+
             return Ok(solicitudes);
         }
+
 
         //- Buscar solicitud
         [HttpGet("{solicitudId}")]
@@ -81,6 +81,31 @@ namespace UpKeepApi.Controllers
                 await _servicioManager.SolicitudServicio.GetSolicitudesAscensor(ascensorId);
 
             return Ok(solicitudes);
+        }
+
+        [HttpGet("servicios")]
+        public async Task<IActionResult> GetServicios()
+        {
+            IEnumerable<ServicioDto> servicios = await _servicioManager.SolicitudServicio.GetServicios();
+
+            return Ok(servicios);
+        }
+
+
+        [HttpGet("prioridad")]
+        public async Task<IActionResult> GetPrioridades()
+        {
+            IEnumerable<PrioridadDto> prioridades = await _servicioManager.SolicitudServicio.GetPrioridades();
+
+            return Ok(prioridades);
+        }
+
+        [HttpGet("tipo-servicios")]
+        public async Task<IActionResult> GetTipoServicios()
+        {
+            IEnumerable<TipoSevicioDto> servicios = await _servicioManager.SolicitudServicio.GetTipoServicios();
+
+            return Ok(servicios);
         }
     }
 }

@@ -34,6 +34,7 @@ public class SeccionAscensorDto
 {
     public int ParteAscensorId { get; set; }
     public int SeccionId { get; set; }
+    public string NombreSeccion { get; set; } = null!;
 
     public int AscensorId { get; set; }
 

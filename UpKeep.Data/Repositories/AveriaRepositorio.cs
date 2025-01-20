@@ -6,6 +6,7 @@ using UpKeep.Data.Configuration;
 using UpKeep.Data.Context;
 using UpKeep.Data.Contracts;
 using UpKeep.Data.DTO.Core.Averias;
+using UpKeep.Data.DTO.Core.Cliente;
 using UpKeep.Data.Exceptions.NotFound;
 using UpKeep.Data.Models;
 
@@ -150,12 +151,52 @@ public class AveriaRepositorio : RepositorioBase, IAveriaRepositorio
     public Task<IEnumerable<AveriaDto>> GetAveriasTecnicoAsignadasActivas(int tecnicoId)
     {
         var averias = dbContext.Averia
-            .Where(x => x.ErrorEncontrado == null)
-            .Where(averia => averia.TecnicoId == tecnicoId);
+            .Join(
+                dbContext.Ascensors,
+                x => x.AscensorId,
+                y => y.AscensorId,
+                (averium, ascensor) => new { averium, ascensor }
+            )
+            .Join(
+                dbContext.Edificios,
+                x => x.ascensor.EdificioId,
+                y => y.EdificioId,
+                (averiaAscensor, edificio) => new { averia = averiaAscensor, edificio }
+            )
+            .Where(x => x.averia.averium.ErrorEncontrado == null)
+            .Where(averia => averia.averia.averium.TecnicoId == tecnicoId)
+            .Select(x =>
+                new AveriaDto
+                {
+                    AveriaId = x.averia.averium.AveriaId,
+                    AscensorId = x.averia.averium.AscensorId,
+                    TipoAveriaId = x.averia.averium.TipoAveriaId,
+                    FechaReporte = x.averia.averium.FechaReporte,
+                    Evidencia = x.averia.averium.Evidencia,
+                    ComentarioAveria = x.averia.averium.ComentarioAveria,
+                    FechaRespuesta = x.averia.averium.FechaRespuesta,
+                    ErrorEncontrado = x.averia.averium.ErrorEncontrado,
+                    ReparacionRealizada = x.averia.averium.ReparacionRealizada,
+                    SeccionAveria = x.averia.averium.SeccionAveria,
+                    TecnicoId = x.averia.averium.TecnicoId,
+                    TiempoReparacion = x.averia.averium.TiempoReparacion,
+                    TiempoRespuesta = x.averia.averium.TiempoRespuesta,
+                    Firma = x.averia.averium.Firma,
+                    Geolocalizacion = x.averia.averium.Geolocalizacion,
+                    Edificio = new()
+                    {
+                        EdificioId = x.edificio.EdificioId,
+                        Edificio1 = x.edificio.Edificio1,
+                        EdificioUbicacion = x.edificio.EdificioUbicacion,
+                        Geolocalizacion = x.edificio.Geolocalizacion,
+                        ClienteId = x.edificio.ClienteId,
+                    },
+                });
 
-        IEnumerable<AveriaDto> averiasDto = averias.ProjectToType<AveriaDto>().AsEnumerable();
+        ;
 
-        return Task.FromResult(averiasDto);
+
+        return Task.FromResult(averias.AsEnumerable());
     }
 
     public Task<IEnumerable<AveriaDto>> GetAveriasActivas()

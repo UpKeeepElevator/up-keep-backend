@@ -31,7 +31,17 @@ public class AscensorRepositorio : RepositorioBase, IAscensorRepositorio
         ascensorDto.Edificio =
             dbContext.Edificios.First(x => x.EdificioId == ascensorDto.EdificioId).Adapt<EdificioDto>();
         ascensorDto.Secciones =
-            dbContext.SeccionAscensors.Where(x => x.AscensorId == ascensorId).ProjectToType<SeccionAscensorDto>();
+            dbContext.SeccionAscensors
+                .Include(x => x.Seccion)
+                .Where(x => x.AscensorId == ascensorId)
+                .Select(x => new SeccionAscensorDto
+                {
+                    ParteAscensorId = x.ParteAscensorId,
+                    SeccionId = x.SeccionId,
+                    NombreSeccion = x.Seccion.NombreSeccion,
+                    AscensorId = x.AscensorId,
+                    UltimaRevision = x.UltimaRevision
+                });
 
         return ascensorDto;
     }
@@ -106,21 +116,21 @@ public class AscensorRepositorio : RepositorioBase, IAscensorRepositorio
     public Task<IEnumerable<AscensorDto>> GetAscensoresEdificio(int edificioId)
     {
         var ascensores = dbContext.Ascensors
-        .Where(x => x.EdificioId == edificioId)
-        .Select(x => new AscensorDto()
-        {
-            AscensorId = x.AscensorId,
-            Capacidad = x.Capacidad,
-            Edificio = x.Edificio.Adapt<EdificioDto>(),
-            EdificioId = x.EdificioId,
-            Geolocalizacion = x.Geolocalizacion,
-            Marca = x.Marca,
-            Modelo = x.Modelo,
-            NumeroPisos = x.NumeroPisos,
-            TipoAscensor = x.TipoAscensor,
-            TipoDeUso = x.TipoDeUso,
-            UbicacionEnEdificio = x.UbicacionEnEdificio
-        }).AsEnumerable();
+            .Where(x => x.EdificioId == edificioId)
+            .Select(x => new AscensorDto()
+            {
+                AscensorId = x.AscensorId,
+                Capacidad = x.Capacidad,
+                Edificio = x.Edificio.Adapt<EdificioDto>(),
+                EdificioId = x.EdificioId,
+                Geolocalizacion = x.Geolocalizacion,
+                Marca = x.Marca,
+                Modelo = x.Modelo,
+                NumeroPisos = x.NumeroPisos,
+                TipoAscensor = x.TipoAscensor,
+                TipoDeUso = x.TipoDeUso,
+                UbicacionEnEdificio = x.UbicacionEnEdificio
+            }).AsEnumerable();
 
 
         return Task.FromResult(ascensores);

@@ -124,6 +124,7 @@ public class AveriaController : ControllerBase
     {
         IEnumerable<AveriaDto> averias = await _servicioManager.AveriaServicio.GetAveriasCliente(clienteId);
 
+
         return Ok(averias);
     }
 

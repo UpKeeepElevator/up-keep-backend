@@ -1,3 +1,4 @@
+using FluentEmail.Core;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
@@ -62,16 +63,15 @@ public class SolicitudRepositorio : RepositorioBase, ISolicitudRepositorio
         {
             dbContext.Solicituds.Add(nuevoSolicitud);
             SavesChanges();
-            Log.Information("Solicitud de servicio-{P1} para ascensor-{P2} registrada", request.ServicioId, request.AscensorId);
+            Log.Information("Solicitud de servicio-{P1} para ascensor-{P2} registrada", request.ServicioId,
+                request.AscensorId);
 
             return Task.FromResult(true);
-
         }
         catch (Exception e)
         {
             Log.Error("Error solicitud servicio: {P1} {P2}", e.Message, e.InnerException);
             throw new Exception($"Error solicitud servicio-{request.ServicioId}");
-
         }
     }
 
@@ -111,12 +111,11 @@ public class SolicitudRepositorio : RepositorioBase, ISolicitudRepositorio
 
     public Task<bool> AgregarServicio(ServicioRequest request)
     {
-
         Servicio nuevoServicio = new()
         {
             NombreServicio = request.nombreservicio,
-            Descripcion = request.descripcion
-
+            Descripcion = request.descripcion,
+            TipoServicioId = request.TipoServicioId
         };
 
         try
@@ -126,16 +125,45 @@ public class SolicitudRepositorio : RepositorioBase, ISolicitudRepositorio
             Log.Information("Servicio-{P1} agregado correctamente", request.nombreservicio);
 
             return Task.FromResult(true);
-
         }
         catch (System.Exception e)
         {
-
             Log.Error("Error agregando servicio: {P1} {P2}", e.Message, e.InnerException);
             throw new Exception($"Error agregar servicio-{request.nombreservicio}");
-
         }
+    }
+
+    public Task<IEnumerable<ServicioDto>> GetServicios()
+    {
+        var servicios = dbContext.Servicios
+            .Join(
+                dbContext.TipoServicios,
+                x => x.TipoServicioId,
+                x => x.TipoServicioId,
+                (servicio, tipoServicio) => new { servicio, tipoServicio }
+            )
+            .Select(x => new ServicioDto
+            {
+                NombreServicio = x.servicio.NombreServicio,
+                Descripcion = x.servicio.Descripcion,
+                ServicioId = x.servicio.ServicioId,
+                TipoServicioId = x.tipoServicio.TipoServicioId,
+                TipoServicio = x.tipoServicio.Adapt<TipoSevicioDto>(),
+            })
+            .ToList();
+
+        IEnumerable<ServicioDto> servicioDtos = servicios.AsQueryable().ProjectToType<ServicioDto>().AsEnumerable();
 
 
+        return Task.FromResult(servicioDtos);
+    }
+
+    public Task<IEnumerable<TipoSevicioDto>> GetTiposServicios()
+    {
+        var tipoServicios = dbContext.TipoServicios;
+
+        var tipoSevicioDtos = tipoServicios.ProjectToType<TipoSevicioDto>().AsEnumerable();
+
+        return Task.FromResult(tipoSevicioDtos);
     }
 }
