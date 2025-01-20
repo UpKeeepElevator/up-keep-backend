@@ -8,4 +8,5 @@ public interface IRepositorioManager
     IAscensorRepositorio ascensorRepositorio { get; }
     IAveriaRepositorio averiaRepositorio { get; }
     ISolicitudRepositorio solicitudRepositorio { get; }
+    IMantenimientoRepositorio mantenimientoRepositorio { get; }
 }

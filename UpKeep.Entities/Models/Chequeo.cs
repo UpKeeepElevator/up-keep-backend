@@ -7,13 +7,13 @@ public partial class Chequeo
 {
     public int EstadoSeccionId { get; set; }
 
-    public string? ChequeoComentarios { get; set; }
+    public string ChequeoComentarios { get; set; } = null!;
 
     public int ChequeoId { get; set; }
 
-    public DateOnly? ChequeoFecha { get; set; }
+    public DateOnly ChequeoFecha { get; set; }
 
-    public DateTime? ChequeoHora { get; set; }
+    public DateTime ChequeoHora { get; set; }
 
     public int MantenimientoId { get; set; }
 

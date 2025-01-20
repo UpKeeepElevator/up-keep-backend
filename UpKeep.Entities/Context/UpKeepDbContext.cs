@@ -115,7 +115,6 @@ public partial class UpKeepDbContext : DbContext
 
             entity.HasOne(d => d.Chequeo).WithMany(p => p.AnexoChequeos)
                 .HasForeignKey(d => d.ChequeoId)
-                .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("anexochequeo_chequeo_fk");
         });
 
@@ -234,7 +233,7 @@ public partial class UpKeepDbContext : DbContext
             entity.ToTable("Chequeo");
 
             entity.Property(e => e.ChequeoId)
-                .ValueGeneratedNever()
+                .HasDefaultValueSql("nextval('chequeo_chequeoid_seq'::regclass)")
                 .HasColumnName("chequeoId");
             entity.Property(e => e.ChequeoComentarios).HasColumnName("chequeo_comentarios");
             entity.Property(e => e.ChequeoFecha).HasColumnName("chequeo_fecha");
@@ -355,7 +354,7 @@ public partial class UpKeepDbContext : DbContext
             entity.ToTable("Mantenimiento");
 
             entity.Property(e => e.MantenimientoId)
-                .ValueGeneratedNever()
+                .HasDefaultValueSql("nextval('mantenimiento_mantenimientoid_seq'::regclass)")
                 .HasColumnName("mantenimientoId");
             entity.Property(e => e.AscensorId).HasColumnName("ascensorId");
             entity.Property(e => e.Duracion).HasColumnName("duracion");
@@ -634,6 +633,8 @@ public partial class UpKeepDbContext : DbContext
         });
         modelBuilder.HasSequence("ascensor_ascensorid_seq");
         modelBuilder.HasSequence("averia_averiaid_seq");
+        modelBuilder.HasSequence("chequeo_chequeoid_seq");
+        modelBuilder.HasSequence("mantenimiento_mantenimientoid_seq");
         modelBuilder.HasSequence("seccion_seccionid_seq");
         modelBuilder.HasSequence("solicitud_solicitudid_seq");
         modelBuilder.HasSequence("tipoaveria_tipoaveriaid_seq");

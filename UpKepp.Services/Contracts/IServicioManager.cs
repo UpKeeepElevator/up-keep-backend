@@ -7,4 +7,5 @@ public interface IServicioManager
     IAveriaService AveriaServicio { get; }
     ISolicitudService SolicitudServicio { get; }
     IAscensorService AscensorServicio { get; }
+    IMantenimientoService MantenimientoService { get; }
 }

@@ -14,6 +14,7 @@ public class RepositorioManager : IRepositorioManager
     private readonly Lazy<IAscensorRepositorio> _ascensorRepositorio;
     private readonly Lazy<IAveriaRepositorio> _averiaRepositorio;
     private readonly Lazy<ISolicitudRepositorio> _solicitudRepositorio;
+    private readonly Lazy<IMantenimientoRepositorio> _mantenimientoRepositorio;
 
 
     //Configuaracion
@@ -38,6 +39,8 @@ public class RepositorioManager : IRepositorioManager
             new Lazy<IAveriaRepositorio>(() => new AveriaRepositorio(_postgresContext, _bucketConfig));
         _solicitudRepositorio =
             new Lazy<ISolicitudRepositorio>(() => new SolicitudRepositorio(_postgresContext));
+        _mantenimientoRepositorio =
+            new Lazy<IMantenimientoRepositorio>(() => new MantenimientoRepositorio(_postgresContext, _bucketConfig));
     }
 
 
@@ -46,5 +49,6 @@ public class RepositorioManager : IRepositorioManager
     public IAscensorRepositorio ascensorRepositorio => _ascensorRepositorio.Value;
     public IAveriaRepositorio averiaRepositorio => _averiaRepositorio.Value;
     public ISolicitudRepositorio solicitudRepositorio => _solicitudRepositorio.Value;
+    public IMantenimientoRepositorio mantenimientoRepositorio => _mantenimientoRepositorio.Value;
     public IBucketRepositorio BucketRepositorio => _bucketServicio.Value;
 }
