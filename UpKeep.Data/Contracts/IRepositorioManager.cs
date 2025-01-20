@@ -9,4 +9,5 @@ public interface IRepositorioManager
     IAveriaRepositorio averiaRepositorio { get; }
     ISolicitudRepositorio solicitudRepositorio { get; }
     IMantenimientoRepositorio mantenimientoRepositorio { get; }
+    IRutaRepositorio RutaRepositorio { get; }
 }

@@ -1,11 +1,11 @@
 using UpKeep.Data.DTO.Core.Ascensores;
 
-namespace UpKepp.Services.Contracts;
+namespace UpKeep.Data.Contracts;
 
-public interface IRutaService
+public interface IRutaRepositorio
 {
+    Task<RutaDto> GetRuta(string requestRutaId);
     Task<bool> CrearRuta(RutaRequest request);
     Task<bool> AgregarAscensorARuta(AscensorRutaDto dto);
-    Task<RutaDto> GetRuta(string rutaId);
     Task<IEnumerable<RutaDto>> GetRutas();
 }

@@ -8,4 +8,5 @@ public interface IServicioManager
     ISolicitudService SolicitudServicio { get; }
     IAscensorService AscensorServicio { get; }
     IMantenimientoService MantenimientoService { get; }
+    IRutaService RutaService { get; }
 }

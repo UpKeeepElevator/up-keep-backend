@@ -50,4 +50,9 @@ public class AscensorService : ServicioBase, IAscensorService
     {
         return await _repositorioManager.ascensorRepositorio.GetAscensoresEdificio(edificioId);
     }
+
+    public async Task<IEnumerable<AscensorDto>> GetAscensores()
+    {
+        return await _repositorioManager.ascensorRepositorio.GetAscensores();
+    }
 }

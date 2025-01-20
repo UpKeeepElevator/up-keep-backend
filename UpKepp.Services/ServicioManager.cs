@@ -15,6 +15,7 @@ public class ServicioManager : IServicioManager
     private readonly Lazy<IAveriaService> _averiaServicio;
     private readonly Lazy<ISolicitudService> _solicitudServicio;
     private readonly Lazy<IMantenimientoService> _mantenimientoServicio;
+    private readonly Lazy<IRutaService> _rutaServicio;
 
 
     //Configuracion
@@ -37,6 +38,7 @@ public class ServicioManager : IServicioManager
         _averiaServicio = new Lazy<IAveriaService>(() => new AveriaServicio(_repositorioManager));
         _solicitudServicio = new Lazy<ISolicitudService>(() => new SolicitudServicio(_repositorioManager));
         _mantenimientoServicio = new Lazy<IMantenimientoService>(() => new MantenimientoServicio(_repositorioManager));
+        _rutaServicio = new Lazy<IRutaService>(() => new RutaServicio(_repositorioManager));
     }
 
 
@@ -46,4 +48,5 @@ public class ServicioManager : IServicioManager
     public ISolicitudService SolicitudServicio => _solicitudServicio.Value;
     public IAscensorService AscensorServicio => _ascensorServicio.Value;
     public IMantenimientoService MantenimientoService => _mantenimientoServicio.Value;
+    public IRutaService RutaService => _rutaServicio.Value;
 }

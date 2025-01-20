@@ -135,4 +135,26 @@ public class AscensorRepositorio : RepositorioBase, IAscensorRepositorio
 
         return Task.FromResult(ascensores);
     }
+
+    public Task<IEnumerable<AscensorDto>> GetAscensores()
+    {
+        var ascensores = dbContext.Ascensors
+            .Select(x => new AscensorDto()
+            {
+                AscensorId = x.AscensorId,
+                Capacidad = x.Capacidad,
+                Edificio = x.Edificio.Adapt<EdificioDto>(),
+                EdificioId = x.EdificioId,
+                Geolocalizacion = x.Geolocalizacion,
+                Marca = x.Marca,
+                Modelo = x.Modelo,
+                NumeroPisos = x.NumeroPisos,
+                TipoAscensor = x.TipoAscensor,
+                TipoDeUso = x.TipoDeUso,
+                UbicacionEnEdificio = x.UbicacionEnEdificio
+            }).AsEnumerable();
+
+
+        return Task.FromResult(ascensores);
+    }
 }
