@@ -121,6 +121,19 @@ public class UsuarioRepositorio : RepositorioBase, IUsuarioRepositorio
         return dbContext.Rols.ToList();
     }
 
+    public Task<List<Rol>> GetRoles(int usuarioId)
+    {
+        var usuario = dbContext.Usuarios
+            .Include(x => x.Rols)
+            .FirstOrDefault(x => x.UsuarioId == usuarioId);
+        if (usuario is null)
+            throw new UsuarioNotFound(usuarioId);
+
+        var roles = usuario.Rols.ToList();
+
+        return Task.FromResult(roles);
+    }
+
     public Task<IEnumerable<UsuarioDTO>> GetTecnicos()
     {
         int rolTecnico = 1;
@@ -179,5 +192,14 @@ public class UsuarioRepositorio : RepositorioBase, IUsuarioRepositorio
         IEnumerable<TrabajoHecho> trabajos = averias;
 
         return Task.FromResult(trabajos);
+    }
+
+    public Task<IEnumerable<UsuarioDTO>> GetUsuarios()
+    {
+        var usuarios = dbContext.Usuarios;
+
+        var projectToType = usuarios.ProjectToType<UsuarioDTO>().AsEnumerable();
+
+        return Task.FromResult(projectToType);
     }
 }

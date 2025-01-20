@@ -14,7 +14,9 @@ public interface IUsuarioRepositorio
     Task<UsuarioDTO> GetUsuario(int usuarioId);
     Task<UsuarioDTO> AgregarUsuario(UsuarioRequest usuarioRequest);
     Task<List<Rol>> GetRoles();
+    Task<List<Rol>> GetRoles(int usuarioId);
     Task<IEnumerable<UsuarioDTO>> GetTecnicos();
     Task<IEnumerable<TrabajoAveria>> BuscarTrabajoAverias(int clienteId);
     Task<IEnumerable<TrabajoHecho>> BuscarTrabajosHechosTecnico(int tecnicoId);
+    Task<IEnumerable<UsuarioDTO>> GetUsuarios();
 }

@@ -65,7 +65,6 @@ namespace UpKeepApi.Controllers
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] RecuperarPassword cuenta)
         {
-
             bool exito = await _servicioManager.UsuarioServicio.ForgotPassword(cuenta);
 
             ResponseGeneric response = new()
@@ -75,7 +74,6 @@ namespace UpKeepApi.Controllers
 
 
             return Ok(response);
-
         }
 
         //Agregar restriccion de claim de rol para reset
@@ -93,46 +91,48 @@ namespace UpKeepApi.Controllers
 
 
             return Ok(response);
+        }
 
+        [HttpGet("")]
+        public async Task<IActionResult> BuscarUsuarios()
+        {
+            IEnumerable<UsuarioDTO> tecnicos = await _servicioManager.UsuarioServicio.GetUsuarios();
+
+            return Ok(tecnicos);
         }
 
 
         [HttpGet("tecnicos")]
         public async Task<IActionResult> BuscarTecnicos()
         {
-
             IEnumerable<UsuarioDTO> tecnicos = await _servicioManager.UsuarioServicio.GetTecnicos();
 
             return Ok(tecnicos);
-
         }
 
         [HttpGet("tecnico/{tecnicoId}/trabajos")]
         public async Task<IActionResult> BuscarTrabajosTecnico([FromRoute] int tecnicoId)
         {
-
-            IEnumerable<TrabajoHecho> trabajosHechos = await _servicioManager.UsuarioServicio.BuscarTrabajosHechosTecnico(tecnicoId);
+            IEnumerable<TrabajoHecho> trabajosHechos =
+                await _servicioManager.UsuarioServicio.BuscarTrabajosHechosTecnico(tecnicoId);
 
             return Ok(trabajosHechos);
-
         }
 
 
         [HttpGet("cliente/{clienteId}/averias")]
         public async Task<IActionResult> BuscarTrabajosCliente([FromRoute] int clienteId)
         {
-
-            IEnumerable<TrabajoAveria> trabajosHechos = await _servicioManager.UsuarioServicio.BuscarTrabajoAverias(clienteId);
+            IEnumerable<TrabajoAveria> trabajosHechos =
+                await _servicioManager.UsuarioServicio.BuscarTrabajoAverias(clienteId);
 
             return Ok(trabajosHechos);
-
         }
 
 
         [HttpDelete("{usuarioId}")]
         public async Task<IActionResult> DeleteUsuario([FromRoute] int usuarioId)
         {
-
             bool exito = await _servicioManager.UsuarioServicio.DeleteUsuario(usuarioId);
 
             ResponseGeneric response = new()
@@ -142,18 +142,14 @@ namespace UpKeepApi.Controllers
 
 
             return Ok(response);
-
         }
+
         [HttpPut("{usuarioId}")]
         public async Task<IActionResult> EditarUsuario([FromRoute] int usuarioId, [FromBody] EditarUsuario usuario)
         {
             UsuarioDTO nuevoUsuario = await _servicioManager.UsuarioServicio.EditarUsuario(usuarioId, usuario);
 
             return Ok(nuevoUsuario);
-
         }
-
     }
-
 }
-

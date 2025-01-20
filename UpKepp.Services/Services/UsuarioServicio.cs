@@ -149,9 +149,24 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
         throw new NotImplementedException();
     }
 
+    public async Task<IEnumerable<UsuarioDTO>> GetUsuarios()
+    {
+        List<UsuarioDTO> usuarios = (await _repositorioManager.usuarioRepositorio.GetUsuarios()).ToList();
+        foreach (var usuarioDto in usuarios)
+        {
+            var roles = await _repositorioManager.usuarioRepositorio.GetRoles(usuarioDto.UsuarioId);
+            usuarioDto.Roles = roles.OrderByDescending(x => x.RolId).AsQueryable().ProjectToType<RolDto>();
+        }
+
+        return usuarios;
+    }
+
     public async Task<IEnumerable<UsuarioDTO>> GetTecnicos()
     {
-        return await _repositorioManager.usuarioRepositorio.GetTecnicos();
+        var usuarios = await _repositorioManager.usuarioRepositorio.GetTecnicos();
+
+
+        return usuarios;
     }
 
     public async Task<IEnumerable<TrabajoAveria>> BuscarTrabajoAverias(int clienteId)
