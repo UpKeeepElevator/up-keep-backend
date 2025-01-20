@@ -26,4 +26,5 @@ public interface IUsuarioService
     Task<bool> ResetPassword(ResetPassword cuenta, string? usuario);
 
     Task<IEnumerable<UsuarioDTO>> GetUsuarios();
+    Task<UsuarioDTO> GetUsuario(int usuarioId);
 }

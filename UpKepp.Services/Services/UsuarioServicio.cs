@@ -158,7 +158,13 @@ public class UsuarioServicio : ServicioBase, IUsuarioService
             usuarioDto.Roles = roles.OrderByDescending(x => x.RolId).AsQueryable().ProjectToType<RolDto>();
         }
 
+
         return usuarios;
+    }
+
+    public async Task<UsuarioDTO> GetUsuario(int usuarioId)
+    {
+        return await _repositorioManager.usuarioRepositorio.GetUsuario(usuarioId);
     }
 
     public async Task<IEnumerable<UsuarioDTO>> GetTecnicos()

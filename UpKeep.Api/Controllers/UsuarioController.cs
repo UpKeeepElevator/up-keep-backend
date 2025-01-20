@@ -101,6 +101,21 @@ namespace UpKeepApi.Controllers
             return Ok(tecnicos);
         }
 
+        [HttpGet("{usuarioId}")]
+        public async Task<IActionResult> BuscarUsuario([FromRoute] int usuarioId)
+        {
+            UsuarioDTO tecnicos = await _servicioManager.UsuarioServicio.GetUsuario(usuarioId);
+
+            return Ok(tecnicos);
+        }
+
+        [HttpGet("roles")]
+        public async Task<IActionResult> BuscarRoles()
+        {
+            IEnumerable<RolDto> tecnicos = await _servicioManager.UsuarioServicio.GetRoles();
+
+            return Ok(tecnicos);
+        }
 
         [HttpGet("tecnicos")]
         public async Task<IActionResult> BuscarTecnicos()
